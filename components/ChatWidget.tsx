@@ -14,7 +14,7 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hi! I'm your digital safety assistant. I can help you learn about deepfakes, phishing protection, and online safety. How can I assist you today?",
+      text: "Hi! I'm Mr. Gosse, your digital safety assistant. I can help you learn about deepfakes, phishing protection, and online safety. How can I assist you today?",
       isUser: false,
       timestamp: new Date()
     }
@@ -96,8 +96,8 @@ export default function ChatWidget() {
           {/* Chat Header */}
           <div className="bg-blue-500 text-white p-4 rounded-t-lg flex justify-between items-center">
             <div>
-              <h3 className="font-semibold">Digital Safety Assistant</h3>
-              <p className="text-sm text-blue-100">Online now</p>
+              <h3 className="font-semibold">Mr. Gosse</h3>
+              <p className="text-sm text-blue-100">Digital Safety Assistant</p>
             </div>
             <button
               onClick={() => setIsOpen(false)}

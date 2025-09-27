@@ -71,31 +71,31 @@ export default function Prevent() {
             
             {/* Progress Bar with Benchmarks */}
             <div className="relative mb-8">
-              <div className="bg-black/20 dark:bg-white/20 rounded-full h-4 overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-400 to-purple-500 h-full rounded-full transition-all duration-500" style={{width: `${progress}%`}}></div>
+              <div className="bg-gray-200 dark:bg-white/20 rounded-full h-4 overflow-hidden">
+                <div className="bg-gradient-to-r from-orange to-orange/80 dark:from-orange dark:to-orange/70 h-full rounded-full transition-all duration-500" style={{width: `${progress}%`}}></div>
               </div>
               
               {/* Benchmarks */}
               <div className="absolute top-0 w-full h-4 flex justify-between">
                 <div className="flex flex-col items-center">
-                  <div className="w-1 h-4 bg-black/40 dark:bg-white/40 rounded-full"></div>
-                  <div className="text-xs text-black/70 dark:text-white/70 mt-6">Novice<br/>0%</div>
+                  <div className="w-1 h-4 bg-gray-400 dark:bg-white/40 rounded-full"></div>
+                  <div className="text-xs text-gray-600 dark:text-white/70 mt-6">Novice<br/>0%</div>
                 </div>
                 <div className="flex flex-col items-center">
-                  <div className="w-1 h-4 bg-black/40 dark:bg-white/40 rounded-full"></div>
-                  <div className="text-xs text-black/70 dark:text-white/70 mt-6">Privacy Protector<br/>25%</div>
+                  <div className="w-1 h-4 bg-gray-400 dark:bg-white/40 rounded-full"></div>
+                  <div className="text-xs text-gray-600 dark:text-white/70 mt-6">Privacy Protector<br/>25%</div>
                 </div>
                 <div className="flex flex-col items-center">
-                  <div className="w-1 h-4 bg-black/40 dark:bg-white/40 rounded-full"></div>
-                  <div className="text-xs text-black/70 dark:text-white/70 mt-6">Phishing Fighter<br/>50%</div>
+                  <div className="w-1 h-4 bg-gray-400 dark:bg-white/40 rounded-full"></div>
+                  <div className="text-xs text-gray-600 dark:text-white/70 mt-6">Phishing Fighter<br/>50%</div>
                 </div>
                 <div className="flex flex-col items-center">
-                  <div className="w-1 h-4 bg-black/40 dark:bg-white/40 rounded-full"></div>
-                  <div className="text-xs text-black/70 dark:text-white/70 mt-6">Deepfake Detective<br/>75%</div>
+                  <div className="w-1 h-4 bg-gray-400 dark:bg-white/40 rounded-full"></div>
+                  <div className="text-xs text-gray-600 dark:text-white/70 mt-6">Deepfake Detective<br/>75%</div>
                 </div>
                 <div className="flex flex-col items-center">
-                  <div className="w-1 h-4 bg-black/40 dark:bg-white/40 rounded-full"></div>
-                  <div className="text-xs text-black/70 dark:text-white/70 mt-6">Expert Privacy Passport<br/>100%</div>
+                  <div className="w-1 h-4 bg-gray-400 dark:bg-white/40 rounded-full"></div>
+                  <div className="text-xs text-gray-600 dark:text-white/70 mt-6">Expert Privacy Passport<br/>100%</div>
                 </div>
               </div>
             </div>
