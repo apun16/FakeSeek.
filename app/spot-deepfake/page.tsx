@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { DeepfakeAnalysis } from '@/lib/gemini'
+import { createCanvasDeepfakeVariations } from '@/lib/client-deepfake'
 
 export default function SpotDeepfake() {
   const { user, error, isLoading } = useUser()
@@ -15,7 +16,6 @@ export default function SpotDeepfake() {
   const [showResults, setShowResults] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [modalImage, setModalImage] = useState<string | null>(null)
-  const [showAnomalies, setShowAnomalies] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Show loading state
@@ -76,62 +76,26 @@ export default function SpotDeepfake() {
 
     setIsGenerating(true)
     try {
-      // Create mock deepfake variations with different visual effects
-      const variations = await createMockDeepfakes(originalImage)
+      // Generate deepfake variations client-side
+      const variations = await createCanvasDeepfakeVariations(originalImage)
       setDeepfakeImages(variations)
       setSelectedDeepfake(variations[0]) // Select first deepfake by default
     } catch (error) {
       console.error('Error generating deepfakes:', error)
+      // Fallback to original image with markers
+      const fallbackVariations = [
+        originalImage + '#subtle',
+        originalImage + '#moderate',
+        originalImage + '#strong',
+        originalImage + '#extreme'
+      ]
+      setDeepfakeImages(fallbackVariations)
+      setSelectedDeepfake(fallbackVariations[0])
     } finally {
       setIsGenerating(false)
     }
   }
 
-  const createMockDeepfakes = (originalImage: string): Promise<string[]> => {
-    // Create a canvas to manipulate the image
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    const img = new Image()
-    
-    return new Promise((resolve) => {
-      img.onload = () => {
-        if (!ctx) {
-          resolve([originalImage, originalImage, originalImage, originalImage])
-          return
-        }
-        
-        canvas.width = img.width
-        canvas.height = img.height
-        
-        const variations: string[] = []
-        
-        // Variation 1: Original (for comparison)
-        ctx.drawImage(img, 0, 0)
-        variations.push(canvas.toDataURL('image/jpeg', 0.8))
-        
-        // Variation 2: Blurred (simulates compression artifacts)
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.filter = 'blur(2px)'
-        ctx.drawImage(img, 0, 0)
-        variations.push(canvas.toDataURL('image/jpeg', 0.8))
-        
-        // Variation 3: Color shifted (simulates lighting inconsistencies)
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.filter = 'hue-rotate(15deg) saturate(1.2)'
-        ctx.drawImage(img, 0, 0)
-        variations.push(canvas.toDataURL('image/jpeg', 0.8))
-        
-        // Variation 4: Brightness adjusted (simulates artificial lighting)
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.filter = 'brightness(1.3) contrast(1.1)'
-        ctx.drawImage(img, 0, 0)
-        variations.push(canvas.toDataURL('image/jpeg', 0.8))
-        
-        resolve(variations)
-      }
-      img.src = originalImage
-    })
-  }
 
   const analyzeImages = async () => {
     if (!originalImage || !selectedDeepfake) return
@@ -143,17 +107,52 @@ export default function SpotDeepfake() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          originalImage, 
-          deepfakeImage: selectedDeepfake 
+        body: JSON.stringify({
+          originalImage,
+          deepfakeImage: selectedDeepfake
         }),
       })
 
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.details || errorData.error || 'Analysis failed')
+      }
+
       const data = await response.json()
-      setAnalysis(data)
-      setShowResults(true)
+      console.log('Analysis response:', data)
+
+      if (data.success && data.analysis) {
+        // Validate the analysis structure
+        if (data.analysis.comparison && 
+            typeof data.analysis.comparison.similarities === 'string' &&
+            typeof data.analysis.comparison.anomalies === 'string' &&
+            typeof data.analysis.comparison.confidenceScore === 'string') {
+          setAnalysis(data.analysis)
+          setShowResults(true)
+        } else {
+          throw new Error('Invalid analysis structure received')
+        }
+      } else {
+        throw new Error('Invalid response format')
+      }
     } catch (error) {
       console.error('Error analyzing images:', error)
+
+      // Show error to user
+      alert(`Analysis failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
+
+      // Provide fallback analysis for demo purposes
+      const fallbackAnalysis = {
+        original: "Error occurred during analysis",
+        deepfake: "Error occurred during analysis",
+        comparison: {
+          similarities: "Analysis could not be completed due to an error.",
+          anomalies: "Please check your internet connection and try again. If the problem persists, the service may be temporarily unavailable.",
+          confidenceScore: "N/A"
+        }
+      }
+      setAnalysis(fallbackAnalysis)
+      setShowResults(true)
     } finally {
       setIsAnalyzing(false)
     }
@@ -175,10 +174,10 @@ export default function SpotDeepfake() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-oswald font-bold text-gray-900 dark:text-white mb-4">
-            Spot the Deepfake
+            Deepfake Detection Training
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Upload an image to generate deepfake variations and learn how to detect AI-generated content
+            Upload a stock photo or your own image to generate educational deepfake variations and learn how to detect AI-generated content
           </p>
         </div>
 
@@ -186,8 +185,11 @@ export default function SpotDeepfake() {
         <div className="bg-orange/10 dark:bg-white/5 rounded-xl p-8 mb-8">
           <div className="text-center">
             <h2 className="text-2xl font-oswald font-semibold text-gray-900 dark:text-white mb-4">
-              Upload Your Image
+              Upload Image for Training
             </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Use stock photos, your own photos, or royalty-free images for educational deepfake detection training
+            </p>
             <input
               ref={fileInputRef}
               type="file"
@@ -225,6 +227,11 @@ export default function SpotDeepfake() {
             >
               {isGenerating ? 'Generating Deepfakes...' : 'Generate Deepfake Variations'}
             </button>
+            {isGenerating && (
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                Creating 4 variations with varying manipulation levels...
+              </p>
+            )}
           </div>
         )}
 
@@ -259,29 +266,6 @@ export default function SpotDeepfake() {
                     className="max-w-full max-h-full object-contain rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
                     onClick={() => openModal(selectedDeepfake || deepfakeImages[0])}
                   />
-                  {/* Anomaly Overlay */}
-                  {showAnomalies && analysis?.comparison.anomalyCoordinates && (
-                    <div className="absolute inset-0 pointer-events-none">
-                      {analysis.comparison.anomalyCoordinates.map((coord, index) => (
-                        <div
-                          key={index}
-                          className="absolute border-2 border-red-500 rounded-full flex items-center justify-center"
-                          style={{
-                            left: `${(coord.x / 400) * 100}%`, // Assuming 400px base width
-                            top: `${(coord.y / 400) * 100}%`, // Assuming 400px base height
-                            width: `${(coord.w / 400) * 100}%`,
-                            height: `${(coord.h / 400) * 100}%`,
-                            minWidth: '20px',
-                            minHeight: '20px'
-                          }}
-                        >
-                          <div className="bg-red-500 text-white text-xs px-1 py-0.5 rounded absolute -top-6 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-                            {coord.label}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
                 
                 {/* Deepfake Variations */}
@@ -320,21 +304,6 @@ export default function SpotDeepfake() {
                 {isAnalyzing ? 'Analyzing...' : 'Detect Anomalies'}
               </button>
               
-              {/* Toggle Anomaly Highlighting */}
-              {analysis && (
-                <div>
-                  <button
-                    onClick={() => setShowAnomalies(!showAnomalies)}
-                    className={`px-6 py-2 rounded-lg font-inter font-medium transition-colors duration-200 ${
-                      showAnomalies 
-                        ? 'bg-green-500 hover:bg-green-600 text-white' 
-                        : 'bg-gray-500 hover:bg-gray-600 text-white'
-                    }`}
-                  >
-                    {showAnomalies ? 'Hide Anomaly Circles' : 'Show Anomaly Circles'}
-                  </button>
-                </div>
-              )}
             </div>
           </div>
         )}
@@ -378,30 +347,6 @@ export default function SpotDeepfake() {
               </div>
             </div>
 
-            {/* Anomaly Coordinates */}
-            {analysis.comparison.anomalyCoordinates && analysis.comparison.anomalyCoordinates.length > 0 && (
-              <div className="mt-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  Detected Anomaly Locations
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {analysis.comparison.anomalyCoordinates.map((coord, index) => (
-                    <div key={index} className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                        <span className="font-medium text-red-800 dark:text-red-200">{coord.label}</span>
-                      </div>
-                      <div className="text-sm text-red-600 dark:text-red-300 mt-1">
-                        Located at position ({coord.x}, {coord.y}) with size {coord.w}×{coord.h} pixels
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
-                  💡 Click "Show Anomaly Circles" above to see these anomalies highlighted on the deepfake image
-                </div>
-              </div>
-            )}
           </div>
         )}
 
