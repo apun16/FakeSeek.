@@ -10,7 +10,7 @@ const ReviewsSlider = () => {
       id: 1,
       name: "Sarah Johnson",
       role: "Journalist",
-      content: "FakeSeek has revolutionized how I verify news sources. The AI detection is incredibly accurate and saves me hours of fact-checking.",
+      content: "FakeSeek has revolutionized how I view my own social media presence. The AI detection is incredibly accurate and makes me feel safer about being on the internet.",
       rating: 5,
       avatar: "SJ"
     },
@@ -18,7 +18,7 @@ const ReviewsSlider = () => {
       id: 2,
       name: "Michael Chen",
       role: "Educator",
-      content: "As a teacher, I use FakeSeek to help students develop critical thinking skills. The prevention resources are invaluable for media literacy education.",
+      content: "As a teacher, I use FakeSeek to help students develop online safety skills. The prevention resources are invaluable for media literacy education.",
       rating: 5,
       avatar: "MC"
     },
@@ -34,7 +34,7 @@ const ReviewsSlider = () => {
       id: 4,
       name: "James Wilson",
       role: "Content Creator",
-      content: "I rely on FakeSeek daily to ensure the content I share is credible. The real-time scanning feature is a game-changer for content creators.",
+      content: "I rely on FakeSeek daily to ensure the content I share is crediblew. The real-time scanning feature is a game-changer for content creators.",
       rating: 5,
       avatar: "JW"
     },
