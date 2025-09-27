@@ -1,4 +1,4 @@
-// File: /Users/aadya/Desktop/fakeseek/FakeSeek./app/detect/page.tsx
+// File: /Users/tanvibatchu/Documents/Technova/FakeSeek./app/detect/page.tsx
 import * as entry from '../../../../app/detect/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
