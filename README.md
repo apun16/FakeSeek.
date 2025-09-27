@@ -1,2 +1,2 @@
-# FakeSeek.
+# FakeSeek
 TechNova 2025 🫶
