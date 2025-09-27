@@ -70,13 +70,13 @@ export default function Prevent() {
              
           {/* Learn and News boxes */}
           <div className="flex gap-8 justify-center w-full mt-8">
-            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[28rem] flex-1 hover:bg-black/15 dark:hover:bg-white/15 transition-colors cursor-pointer flex flex-col">
+            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[28rem] flex-1 hover:bg-orange/35 dark:hover:bg-white/15 transition-colors cursor-pointer flex flex-col">
               <h2 className="text-3xl font-oswald font-bold text-black dark:text-white text-center mb-6">
                 Learn
               </h2>
               <div className="flex-1 flex flex-col justify-center gap-6">
                 <Link href="/spot-deepfake" className="block">
-                  <div className="bg-black/10 dark:bg-white/10 rounded-lg p-6 hover:bg-black/20 dark:hover:bg-white/20 transition-colors cursor-pointer">
+                  <div className="bg-orange/20 dark:bg-white/10 rounded-lg p-6 hover:bg-orange/30 dark:hover:bg-white/20 transition-colors cursor-pointer">
                     <h3 className="text-xl font-oswald font-semibold text-black dark:text-white text-center">
                       Spot the Deepfake
                     </h3>
@@ -86,7 +86,7 @@ export default function Prevent() {
                   </div>
                 </Link>
                 <Link href="/phishing-protection" className="block">
-                  <div className="bg-black/10 dark:bg-white/10 rounded-lg p-6 hover:bg-black/20 dark:hover:bg-white/20 transition-colors cursor-pointer">
+                  <div className="bg-orange/20 dark:bg-white/10 rounded-lg p-6 hover:bg-orange/30 dark:hover:bg-white/20 transition-colors cursor-pointer">
                     <h3 className="text-xl font-oswald font-semibold text-black dark:text-white text-center">
                       Phishing Protection
                     </h3>
@@ -98,7 +98,7 @@ export default function Prevent() {
               </div>
             </div>
             
-            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[28rem] flex-1 hover:bg-black/15 dark:hover:bg-white/15 transition-colors cursor-pointer overflow-y-auto">
+            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[28rem] flex-1 hover:bg-orange/35 dark:hover:bg-white/15 transition-colors cursor-pointer overflow-y-auto">
               <h2 className="text-3xl font-oswald font-bold text-black dark:text-white text-center mb-6">
                 Latest News
               </h2>
@@ -106,7 +106,7 @@ export default function Prevent() {
               {/* News Articles */}
               <div className="space-y-4">
                 <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
-                  <div className="bg-black/5 dark:bg-white/5 rounded-lg p-4 hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+                  <div className="bg-orange/20 dark:bg-white/5 rounded-lg p-4 hover:bg-orange/30 dark:hover:bg-white/10 transition-colors">
                     <h3 className="text-black dark:text-white font-semibold text-sm mb-2">
                       AI-Generated Deepfakes Surge 900% in 2024
                     </h3>
@@ -118,7 +118,7 @@ export default function Prevent() {
                 </a>
                 
                 <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
-                  <div className="bg-black/5 dark:bg-white/5 rounded-lg p-4 hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+                  <div className="bg-orange/20 dark:bg-white/5 rounded-lg p-4 hover:bg-orange/30 dark:hover:bg-white/10 transition-colors">
                     <h3 className="text-black dark:text-white font-semibold text-sm mb-2">
                       New Deepfake Detection Tools Launched
                     </h3>
@@ -130,7 +130,7 @@ export default function Prevent() {
                 </a>
                 
                 <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
-                  <div className="bg-black/5 dark:bg-white/5 rounded-lg p-4 hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+                  <div className="bg-orange/20 dark:bg-white/5 rounded-lg p-4 hover:bg-orange/30 dark:hover:bg-white/10 transition-colors">
                     <h3 className="text-black dark:text-white font-semibold text-sm mb-2">
                       Political Deepfakes Threaten Elections
                     </h3>
@@ -142,7 +142,7 @@ export default function Prevent() {
                 </a>
                 
                 <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
-                  <div className="bg-black/5 dark:bg-white/5 rounded-lg p-4 hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+                  <div className="bg-orange/20 dark:bg-white/5 rounded-lg p-4 hover:bg-orange/30 dark:hover:bg-white/10 transition-colors">
                     <h3 className="text-black dark:text-white font-semibold text-sm mb-2">
                       Celebrities Fight Back Against Deepfakes
                     </h3>

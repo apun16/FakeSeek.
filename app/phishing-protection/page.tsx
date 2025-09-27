@@ -129,25 +129,25 @@ export default function PhishingProtection() {
   }
 
   return (
-    <div className="min-h-screen bg-navy">
-      <Navbar />
+    <div className="min-h-screen bg-white dark:bg-navy">
+     
       
-      <main className="flex items-center justify-center min-h-[calc(100vh-4rem)] py-8">
+      <main className="flex items-center justify-center min-h-[calc(100vh-4rem)] py-8 pt-16">
         <div className="w-full max-w-7xl px-4">
           
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-oswald font-bold text-white mb-4">
+            <h1 className="text-4xl font-oswald font-bold text-black dark:text-white mb-4">
               Phishing Protection Training
             </h1>
-            <p className="text-white/70 text-lg">
+            <p className="text-black/70 dark:text-white/70 text-lg">
               Sort the emails into Safe or Suspicious boxes. Learn to identify phishing attempts!
             </p>
           </div>
 
           {/* Email List */}
           <div className="mb-8">
-            <h2 className="text-2xl font-oswald font-semibold text-white mb-4 text-center">
+            <h2 className="text-2xl font-oswald font-semibold text-black dark:text-white mb-4 text-center">
               Emails to Sort
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -156,15 +156,15 @@ export default function PhishingProtection() {
                   key={email.id}
                   draggable
                   onDragStart={(e) => handleDragStart(e, email)}
-                  className="bg-white/10 backdrop-blur-sm rounded-lg p-4 cursor-move hover:bg-white/15 transition-colors"
+                  className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-lg p-4 cursor-move hover:bg-black/15 dark:hover:bg-white/15 transition-colors"
                 >
-                  <div className="text-white font-semibold text-sm mb-2">
+                  <div className="text-black dark:text-white font-semibold text-sm mb-2">
                     From: {email.sender}
                   </div>
-                  <div className="text-white/90 font-medium mb-2">
+                  <div className="text-black/90 dark:text-white/90 font-medium mb-2">
                     {email.subject}
                   </div>
-                  <div className="text-white/70 text-sm">
+                  <div className="text-black/70 dark:text-white/70 text-sm">
                     {email.content.substring(0, 100)}...
                   </div>
                 </div>
@@ -180,16 +180,16 @@ export default function PhishingProtection() {
               onDrop={(e) => handleDrop(e, 'safe')}
               className="bg-green-500/20 backdrop-blur-sm rounded-xl p-6 min-h-96 border-2 border-dashed border-green-400/50"
             >
-              <h3 className="text-2xl font-oswald font-semibold text-green-400 text-center mb-6">
+              <h3 className="text-2xl font-oswald font-semibold text-green-600 dark:text-green-400 text-center mb-6">
                 ✅ Safe Emails ({safeEmails.length})
               </h3>
               <div className="space-y-4">
                 {safeEmails.map(email => (
-                  <div key={email.id} className="bg-white/10 rounded-lg p-4">
-                    <div className="text-white font-semibold text-sm mb-2">
+                  <div key={email.id} className="bg-black/10 dark:bg-white/10 rounded-lg p-4">
+                    <div className="text-black dark:text-white font-semibold text-sm mb-2">
                       From: {email.sender}
                     </div>
-                    <div className="text-white/90 font-medium mb-2">
+                    <div className="text-black/90 dark:text-white/90 font-medium mb-2">
                       {email.subject}
                     </div>
                     {showResults && (
@@ -213,16 +213,16 @@ export default function PhishingProtection() {
               onDrop={(e) => handleDrop(e, 'suspicious')}
               className="bg-red-500/20 backdrop-blur-sm rounded-xl p-6 min-h-96 border-2 border-dashed border-red-400/50"
             >
-              <h3 className="text-2xl font-oswald font-semibold text-red-400 text-center mb-6">
+              <h3 className="text-2xl font-oswald font-semibold text-red-600 dark:text-red-400 text-center mb-6">
                 ⚠️ Suspicious Emails ({suspiciousEmails.length})
               </h3>
               <div className="space-y-4">
                 {suspiciousEmails.map(email => (
-                  <div key={email.id} className="bg-white/10 rounded-lg p-4">
-                    <div className="text-white font-semibold text-sm mb-2">
+                  <div key={email.id} className="bg-black/10 dark:bg-white/10 rounded-lg p-4">
+                    <div className="text-black dark:text-white font-semibold text-sm mb-2">
                       From: {email.sender}
                     </div>
-                    <div className="text-white/90 font-medium mb-2">
+                    <div className="text-black/90 dark:text-white/90 font-medium mb-2">
                       {email.subject}
                     </div>
                     {showResults && (
@@ -252,7 +252,7 @@ export default function PhishingProtection() {
             </button>
             <button
               onClick={resetGame}
-              className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg transition-colors"
+              className="bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 text-black dark:text-white px-8 py-3 rounded-lg transition-colors"
             >
               Reset Game
             </button>
@@ -260,11 +260,11 @@ export default function PhishingProtection() {
 
           {/* Results */}
           {showResults && (
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8 text-center">
-              <h3 className="text-2xl font-oswald font-semibold text-white mb-4">
+            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8 text-center">
+              <h3 className="text-2xl font-oswald font-semibold text-black dark:text-white mb-4">
                 Your Score: {calculateScore()} / {emails.length}
               </h3>
-              <p className="text-white/70">
+              <p className="text-black/70 dark:text-white/70">
                 {calculateScore() === emails.length 
                   ? "Perfect! You're a phishing detection expert!" 
                   : `Good job! You correctly identified ${calculateScore()} out of ${emails.length} emails.`}
@@ -276,7 +276,7 @@ export default function PhishingProtection() {
           <div className="text-center">
             <Link 
               href="/prevent"
-              className="inline-block bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg transition-colors"
+              className="inline-block bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 text-black dark:text-white px-8 py-3 rounded-lg transition-colors"
             >
               ← Back to Prevention Tools
             </Link>

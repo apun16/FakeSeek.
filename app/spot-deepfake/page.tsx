@@ -47,18 +47,18 @@ export default function SpotDeepfake() {
   }
 
   return (
-    <div className="min-h-screen bg-navy">
-      <Navbar />
+    <div className="min-h-screen bg-white dark:bg-navy">
       
-      <main className="flex items-center justify-center h-[calc(100vh-4rem)]">
+     
+      <main className="flex items-center justify-center h-[calc(100vh-4rem)] pt-16">
         <div className="w-full max-w-6xl px-4">
           
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-oswald font-bold text-white mb-4">
+            <h1 className="text-4xl font-oswald font-bold text-black dark:text-white mb-4">
               Spot the Deepfake
             </h1>
-            <p className="text-white/70 text-lg">
+            <p className="text-black/70 dark:text-white/70 text-lg">
               Upload two images to compare and learn about deepfake detection
             </p>
           </div>
@@ -66,11 +66,11 @@ export default function SpotDeepfake() {
           {/* Upload Areas */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             {/* First Upload Area */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8">
-              <h2 className="text-2xl font-oswald font-semibold text-white text-center mb-6">
+            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8">
+              <h2 className="text-2xl font-oswald font-semibold text-black dark:text-white text-center mb-6">
                 Upload Original Image
               </h2>
-              <div className="border-2 border-dashed border-white/30 rounded-lg p-8 text-center hover:border-white/50 transition-colors">
+              <div className="border-2 border-dashed border-black/30 dark:border-white/30 rounded-lg p-8 text-center hover:border-black/50 dark:hover:border-white/50 transition-colors">
                 {uploadedImage1 ? (
                   <div className="space-y-4">
                     <img 
@@ -80,15 +80,15 @@ export default function SpotDeepfake() {
                     />
                     <button 
                       onClick={() => setUploadedImage1(null)}
-                      className="text-white/70 hover:text-white transition-colors text-sm"
+                      className="text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white transition-colors text-sm"
                     >
                       Remove Image
                     </button>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    <div className="text-white/50 text-6xl">📷</div>
-                    <p className="text-white/70">Click to upload or drag and drop</p>
+                    <div className="text-black/50 dark:text-white/50 text-6xl">📷</div>
+                    <p className="text-black/70 dark:text-white/70">Click to upload or drag and drop</p>
                     <input
                       type="file"
                       accept="image/*"
@@ -108,11 +108,11 @@ export default function SpotDeepfake() {
             </div>
 
             {/* Second Upload Area */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8">
-              <h2 className="text-2xl font-oswald font-semibold text-white text-center mb-6">
+            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8">
+              <h2 className="text-2xl font-oswald font-semibold text-black dark:text-white text-center mb-6">
                 Upload Suspected Deepfake
               </h2>
-              <div className="border-2 border-dashed border-white/30 rounded-lg p-8 text-center hover:border-white/50 transition-colors">
+              <div className="border-2 border-dashed border-black/30 dark:border-white/30 rounded-lg p-8 text-center hover:border-black/50 dark:hover:border-white/50 transition-colors">
                 {uploadedImage2 ? (
                   <div className="space-y-4">
                     <img 
@@ -122,15 +122,15 @@ export default function SpotDeepfake() {
                     />
                     <button 
                       onClick={() => setUploadedImage2(null)}
-                      className="text-white/70 hover:text-white transition-colors text-sm"
+                      className="text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white transition-colors text-sm"
                     >
                       Remove Image
                     </button>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    <div className="text-white/50 text-6xl">🔍</div>
-                    <p className="text-white/70">Click to upload or drag and drop</p>
+                    <div className="text-black/50 dark:text-white/50 text-6xl">🔍</div>
+                    <p className="text-black/70 dark:text-white/70">Click to upload or drag and drop</p>
                     <input
                       type="file"
                       accept="image/*"
@@ -151,11 +151,11 @@ export default function SpotDeepfake() {
           </div>
 
           {/* Educational Text */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 mb-8">
-            <h3 className="text-2xl font-oswald font-semibold text-white text-center mb-4">
+          <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 mb-8">
+            <h3 className="text-2xl font-oswald font-semibold text-black dark:text-white text-center mb-4">
               Deepfake Awareness
             </h3>
-            <p className="text-white/70 text-center text-lg leading-relaxed">
+            <p className="text-black/70 dark:text-white/70 text-center text-lg leading-relaxed">
               Notice the similarities and accuracy within deepfake videos. Make sure to be mindful when using the internet.
               Deepfakes can be incredibly convincing, using advanced AI to create realistic but fake content. Always verify
               sources and be cautious of manipulated media that could spread misinformation.
@@ -166,7 +166,7 @@ export default function SpotDeepfake() {
           <div className="text-center">
             <Link 
               href="/prevent"
-              className="inline-block bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg transition-colors"
+              className="inline-block bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 text-black dark:text-white px-8 py-3 rounded-lg transition-colors"
             >
               ← Back to Prevention Tools
             </Link>
