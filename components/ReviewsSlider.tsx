@@ -10,7 +10,7 @@ const ReviewsSlider = () => {
       id: 1,
       name: "Sarah Johnson",
       role: "Journalist",
-      content: "FakeSeek has revolutionized how I view my own social media presence. The AI detection is incredibly accurate and makes me feel safer about being on the internet.",
+      content: "FakeSeek has revolutionized how I view my own social media presence. The deepfake and privacy analysis is incredibly accurate and makes me feel more informed about my digital identity.",
       rating: 5,
       avatar: "SJ"
     },
@@ -26,7 +26,7 @@ const ReviewsSlider = () => {
       id: 3,
       name: "Dr. Emily Rodriguez",
       role: "Researcher",
-      content: "The precision of FakeSeek's detection algorithms is remarkable. It's become an essential tool in my research on misinformation patterns.",
+      content: "The precision of FakeSeek's detection algorithms is remarkable. It's become an essential tool in my research on deepfakes and womens privacy breaches.",
       rating: 5,
       avatar: "ER"
     },
@@ -34,7 +34,7 @@ const ReviewsSlider = () => {
       id: 4,
       name: "James Wilson",
       role: "Content Creator",
-      content: "I rely on FakeSeek daily to ensure the content I share is crediblew. The real-time scanning feature is a game-changer for content creators.",
+      content: "I rely on FakeSeek daily to ensure the content I share is credible. The real-time scanning feature is a game-changer for content creators, making sure no one is pretending to be us.",
       rating: 5,
       avatar: "JW"
     },
@@ -42,7 +42,7 @@ const ReviewsSlider = () => {
       id: 5,
       name: "Lisa Thompson",
       role: "Social Media Manager",
-      content: "FakeSeek helps me maintain the integrity of our brand's social media presence. The prevention tools have significantly improved our content strategy.",
+      content: "FakeSeek helps me maintain the integrity of our brand's social media presence. The prevention tools have significantly improved our content strategy, by helping us practise for deepfakes and phishing attacks.",
       rating: 5,
       avatar: "LT"
     }

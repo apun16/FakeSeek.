@@ -11,7 +11,7 @@ const Footer = () => {
               FakeSeek
             </Link>
             <p className="text-gray-600 dark:text-white/80 font-inter text-sm leading-relaxed max-w-md mb-6">
-              Empowering users with AI-powered tools to detect and prevent fake news, 
+              Empowering users with digital tools and education to detect and prevent deepfakes and phishing attacks, 
               ensuring a more informed and trustworthy digital world.
             </p>
             <div className="flex space-x-4">

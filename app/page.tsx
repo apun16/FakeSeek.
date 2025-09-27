@@ -44,7 +44,7 @@ export default function Home() {
                 Detect and Scan
               </h2>
               <p className="text-xl font-inter text-gray-700 dark:text-white/90 max-w-lg mx-auto leading-relaxed group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">
-                Use our advanced AI technology to scan and detect fake news across the internet with precision and speed
+                Use our advanced web scraping technology to scan and detect for deepfakes of people across the internet with precision and speed
               </p>
             </div>
           </Link>
@@ -79,7 +79,7 @@ export default function Home() {
                 Learn and Prevent
               </h2>
               <p className="text-xl font-inter text-gray-700 dark:text-white/90 max-w-lg mx-auto leading-relaxed group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">
-                Educate yourself with our comprehensive resources and tools to prevent falling for fake news
+                Educate yourself with our comprehensive resources and tools to stay safe from deepfakes and phishing attacks.
               </p>
             </div>
           </Link>
@@ -93,7 +93,7 @@ export default function Home() {
                 What Our Users Say
               </h2>
               <p className="text-xl font-inter text-gray-700 dark:text-white/80 max-w-2xl mx-auto">
-                Join thousands of users who trust FakeSeek to help them navigate the digital information landscape
+                Join thousands of users who trust FakeSeek to help them navigate the new age of digital deepfakes and cyber attacks.
               </p>
             </div>
             <ReviewsSlider />

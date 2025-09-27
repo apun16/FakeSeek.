@@ -154,10 +154,10 @@ export default function Prevent() {
                 <Link href="/spot-deepfake" className="block">
                   <div className="bg-orange/20 dark:bg-white/10 rounded-lg p-6 hover:bg-orange/30 dark:hover:bg-white/20 transition-colors cursor-pointer">
                     <h3 className="text-xl font-oswald font-semibold text-black dark:text-white text-center">
-                      Spot the Deepfake
+                      Deepfake or not?
                     </h3>
                     <p className="text-black/70 dark:text-white/70 text-center mt-2 text-sm">
-                      View the how realistic a deepfake is from the real photo
+                      Compare two photos to see if one is a deepfake of the other
                     </p>
                   </div>
                 </Link>

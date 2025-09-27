@@ -91,17 +91,17 @@ export default function Detect() {
     {
       id: 1,
       title: "Create Your Profile",
-      content: "Create your personalized profile to get started with our fake news detection system. This step involves setting up your preferences, choosing your areas of interest, and configuring your detection settings. Your profile will help us provide more accurate and relevant results tailored to your needs."
+      content: "Create your personalized profile to get started with our deepfake detection system. This step involves setting up your first name, last name, and upload 2 profile pictures that we can refer to while looking for deepfakes. Your profile will help us provide more accurate and relevant results tailored to your needs."
     },
     {
       id: 2,
       title: "Start Your Scan",
-      content: "Begin scanning for fake news using our advanced AI technology. Simply paste a URL, upload content, or enter text that you want to analyze. Our system will examine the content for signs of misinformation, check against our database of verified sources, and provide you with a comprehensive analysis."
+      content: "Scan for deepfakes using our advanced web scraping technology. Simply press Begin to start scanning! Our system will examine the content for signs of deepfakes, look for privacy breaches, check against our sources, and provide you with a comprehensive analysis."
     },
     {
       id: 3,
       title: "View Your Report",
-      content: "Review your detailed fake news detection report. The report includes a confidence score, identified red flags, source verification status, and recommendations. You'll also receive educational insights about the techniques used in the content and tips for identifying similar misinformation in the future."
+      content: "Review your detailed deepfake detection report. The report includes the total number of results, a number of deepfake related results, and recommendations."
     }
   ]
 

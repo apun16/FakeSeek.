@@ -15,7 +15,7 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Honk honk! Hi there! I'm Mr. Goose, your digital safety assistant! 🦆 I can help you learn about deepfakes, phishing protection, and online safety. *honk* How can I assist you today? *honk honk*",
+      text: "Honk honk! Hi there! I'm Mr. Goose, your digital safety assistant! 🪿 I can help you learn about deepfakes, phishing protection, and online safety. *honk* How can I assist you today? *honk honk*",
       isUser: false,
       timestamp: new Date()
     }
@@ -29,7 +29,7 @@ export default function ChatWidget() {
 
   // Tutorial steps
   const tutorialSteps = [
-    "Honk honk! Hi there! I'm Mr. Goose, your digital safety guide! 🦆 Let me walk you through protecting yourself from deepfakes and online threats. *honk honk*",
+    "Honk honk! Hi there! I'm Mr. Goose, your digital safety guide! 🪿 Let me walk you through protecting yourself from deepfakes and online threats. *honk honk*",
     "Honk! This is your prevention dashboard! Learn about digital threats and how to stay safe online. *honk*",
     "Honk honk! Let's talk about deepfakes - AI-generated fake videos and images. They're getting more realistic! *honk*",
     "Honk! Phishing attacks trick you into giving away personal info. Always verify the sender before clicking! *honk honk*",
@@ -37,7 +37,7 @@ export default function ChatWidget() {
     "Honk! Here are practical tips to protect yourself. When in doubt, verify through multiple sources! *honk honk*",
     "Honk honk! Ready for a quiz? Test your knowledge with our interactive safety challenges! *honk*",
     "Honk! Check out our resources section for detailed guides and the latest security updates! *honk honk*",
-    "Honk honk! Great job! You're now equipped to stay safe online. Stay vigilant and think before you click! 🛡️ *honk* Need more help? I'm always available in the chat bot! *honk honk* 🦆"
+    "Honk honk! Great job! You're now equipped to stay safe online. Stay vigilant and think before you click! 🛡️ *honk* Need more help? I'm always available in the chat bot! *honk honk* 🪿"
   ]
 
   const handleGooseClick = () => {
@@ -206,7 +206,7 @@ export default function ChatWidget() {
         className={`fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-50 ${!hasBeenClicked ? 'animate-bounce' : ''}`}
         title={tutorialCompleted ? "Chat with Mr. Goose" : "Start Tutorial with Mr. Goose"}
       >
-        🦆
+        🪿
       </button>
 
       {/* Chat Window */}
