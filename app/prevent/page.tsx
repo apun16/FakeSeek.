@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
 import ChatWidget from '@/components/ChatWidget'
 import Link from 'next/link'
+import { useUser } from '@auth0/nextjs-auth0/client'
 
 export default function Prevent() {
   const [progress, setProgress] = useState(45) // Default progress
+  const { user, error, isLoading } = useUser()
 
   useEffect(() => {
     // Load progress from localStorage
@@ -15,6 +17,44 @@ export default function Prevent() {
       setProgress(parseInt(savedProgress))
     }
   }, [])
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-navy flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange"></div>
+      </div>
+    )
+  }
+
+  // Redirect to login if not authenticated
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-navy flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-8">
+          <h1 className="text-3xl font-oswald font-bold text-gray-900 dark:text-white mb-6">
+            Authentication Required
+          </h1>
+          <p className="text-lg font-inter text-gray-700 dark:text-white/80 mb-8">
+            Please sign in to access the prevention features.
+          </p>
+          <a
+            href="/api/auth/login"
+            className="block w-full bg-orange hover:bg-orange/80 text-white px-6 py-3 rounded-lg font-inter font-medium transition-colors duration-200 text-center"
+          >
+            Sign In with Google
+          </a>
+          {error && (
+            <div className="mt-4 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+              <p className="text-red-300 text-sm font-inter">
+                Authentication error: {error.message}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="min-h-screen bg-white dark:bg-navy"> 
       <main className="flex items-center justify-center h-[calc(100vh-4rem)]">
