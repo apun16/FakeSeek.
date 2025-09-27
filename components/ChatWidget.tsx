@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface Message {
   id: number
@@ -14,12 +15,66 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hi! I'm Mr. Goose, your digital safety assistant. I can help you learn about deepfakes, phishing protection, and online safety. How can I assist you today?",
+      text: "Honk honk! Hi there! I'm Mr. Goose, your digital safety assistant! 🦆 I can help you learn about deepfakes, phishing protection, and online safety. *honk* How can I assist you today? *honk honk*",
       isUser: false,
       timestamp: new Date()
     }
   ])
   const [inputText, setInputText] = useState('')
+  const [isSpeaking, setIsSpeaking] = useState(false)
+  const [showTutorial, setShowTutorial] = useState(false)
+  const [currentTutorialStep, setCurrentTutorialStep] = useState(0)
+  const [tutorialCompleted, setTutorialCompleted] = useState(false)
+  const [hasBeenClicked, setHasBeenClicked] = useState(false)
+
+  // Tutorial steps
+  const tutorialSteps = [
+    "Honk honk! Hi there! I'm Mr. Goose, your digital safety guide! 🦆 Let me walk you through protecting yourself from deepfakes and online threats. *honk honk*",
+    "Honk! This is your prevention dashboard! Learn about digital threats and how to stay safe online. *honk*",
+    "Honk honk! Let's talk about deepfakes - AI-generated fake videos and images. They're getting more realistic! *honk*",
+    "Honk! Phishing attacks trick you into giving away personal info. Always verify the sender before clicking! *honk honk*",
+    "Honk honk! Social engineering uses psychology to manipulate you. Be suspicious of urgent requests! *honk*",
+    "Honk! Here are practical tips to protect yourself. When in doubt, verify through multiple sources! *honk honk*",
+    "Honk honk! Ready for a quiz? Test your knowledge with our interactive safety challenges! *honk*",
+    "Honk! Check out our resources section for detailed guides and the latest security updates! *honk honk*",
+    "Honk honk! Great job! You're now equipped to stay safe online. Stay vigilant and think before you click! 🛡️ *honk* Need more help? I'm always available in the chat bot! *honk honk* 🦆"
+  ]
+
+  const handleGooseClick = () => {
+    setHasBeenClicked(true)
+    if (tutorialCompleted) {
+      setIsOpen(true)
+    } else {
+      setShowTutorial(true)
+      setCurrentTutorialStep(0)
+    }
+  }
+
+  const nextTutorialStep = () => {
+    if (currentTutorialStep < tutorialSteps.length - 1) {
+      setCurrentTutorialStep(currentTutorialStep + 1)
+    } else {
+      setTutorialCompleted(true)
+      setShowTutorial(false)
+      setCurrentTutorialStep(0)
+      setIsOpen(true)
+    }
+  }
+
+  const skipTutorial = () => {
+    setTutorialCompleted(true)
+    setShowTutorial(false)
+    setCurrentTutorialStep(0)
+    setIsOpen(true)
+  }
+
+  useEffect(() => {
+    if (showTutorial && currentTutorialStep < tutorialSteps.length) {
+      setIsSpeaking(true)
+      const timer = setTimeout(() => setIsSpeaking(false), 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [showTutorial, currentTutorialStep])
 
   const handleSendMessage = async () => {
     if (!inputText.trim()) return
@@ -92,14 +147,66 @@ export default function ChatWidget() {
 
   return (
     <>
-      {/* Chat Button */}
+      {/* Tutorial Script Above Button */}
+      <AnimatePresence>
+        {showTutorial && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-20 right-6 z-40 bg-white rounded-2xl p-4 shadow-lg border-2 border-gray-200 min-w-96 max-w-[28rem]"
+          >
+            {/* Close button */}
+            <button
+              onClick={skipTutorial}
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            {/* Message */}
+            <p className="text-gray-800 text-sm font-medium leading-relaxed pr-6">
+              {tutorialSteps[currentTutorialStep]}
+            </p>
+
+            {/* Action Buttons */}
+            <div className="flex justify-end space-x-2 mt-3">
+              <button
+                onClick={skipTutorial}
+                className="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded-full hover:bg-gray-300 transition-colors"
+              >
+                Skip
+              </button>
+              {currentTutorialStep < tutorialSteps.length - 1 && (
+                <button
+                  onClick={nextTutorialStep}
+                  className="px-4 py-1 bg-blue-500 text-white text-xs rounded-full hover:bg-blue-600 transition-colors"
+                >
+                  Next
+                </button>
+              )}
+              {currentTutorialStep === tutorialSteps.length - 1 && (
+                <button
+                  onClick={nextTutorialStep}
+                  className="px-4 py-1 bg-green-500 text-white text-xs rounded-full hover:bg-green-600 transition-colors"
+                >
+                  Start Chat
+                </button>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Single Goose Button */}
       <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-50"
+        onClick={handleGooseClick}
+        className={`fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white w-14 h-14 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-50 ${!hasBeenClicked ? 'animate-bounce' : ''}`}
+        title={tutorialCompleted ? "Chat with Mr. Goose" : "Start Tutorial with Mr. Goose"}
       >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
+        🦆
       </button>
 
       {/* Chat Window */}

@@ -125,6 +125,7 @@ export default function Prevent() {
       <main className="flex items-center justify-center min-h-[calc(100vh-4rem)] py-8">
         <div className="w-full max-w-6xl">
           
+          
           {/* Digital Passport Progress Bar */}
           <div className="w-full mb-16">
             <div className="flex justify-between items-center mb-4">
@@ -183,7 +184,7 @@ export default function Prevent() {
              
           {/* Learn and News boxes */}
           <div className="flex gap-8 justify-center w-full mt-8">
-            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[36rem] flex-1 hover:bg-orange/35 dark:hover:bg-white/15 transition-colors cursor-pointer flex flex-col">
+            <div id="deepfake-section" className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[36rem] flex-1 hover:bg-orange/35 dark:hover:bg-white/15 transition-colors cursor-pointer flex flex-col">
               <h2 className="text-3xl font-oswald font-bold text-black dark:text-white text-center mb-6">
                 Learn
               </h2>
@@ -199,7 +200,7 @@ export default function Prevent() {
                   </div>
                 </Link>
                 <Link href="/phishing-protection" className="block">
-                  <div className="bg-orange/20 dark:bg-white/10 rounded-lg p-6 hover:bg-orange/30 dark:hover:bg-white/20 transition-colors cursor-pointer">
+                  <div id="phishing-section" className="bg-orange/20 dark:bg-white/10 rounded-lg p-6 hover:bg-orange/30 dark:hover:bg-white/20 transition-colors cursor-pointer">
                     <h3 className="text-xl font-oswald font-semibold text-black dark:text-white text-center">
                       Phishing Protection
                     </h3>
@@ -209,7 +210,7 @@ export default function Prevent() {
                   </div>
                 </Link>
                 <Link href="/learn" className="block">
-                  <div className="bg-orange/20 dark:bg-white/10 rounded-lg p-6 hover:bg-orange/30 dark:hover:bg-white/20 transition-colors cursor-pointer">
+                  <div id="quiz-section" className="bg-orange/20 dark:bg-white/10 rounded-lg p-6 hover:bg-orange/30 dark:hover:bg-white/20 transition-colors cursor-pointer">
                     <h3 className="text-xl font-oswald font-semibold text-black dark:text-white text-center">
                       AI Safety Quiz
                     </h3>
@@ -221,7 +222,7 @@ export default function Prevent() {
               </div>
             </div>
             
-            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[36rem] flex-1 hover:bg-orange/35 dark:hover:bg-white/15 transition-colors cursor-pointer overflow-y-auto">
+            <div id="resources-section" className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[36rem] flex-1 hover:bg-orange/35 dark:hover:bg-white/15 transition-colors cursor-pointer overflow-y-auto">
               <h2 className="text-3xl font-oswald font-bold text-black dark:text-white text-center mb-6">
                 Latest News
               </h2>
@@ -266,7 +267,7 @@ export default function Prevent() {
         </div>
       </main>
       
-      {/* Chat Widget */}
+      {/* Chat Widget with Mr. Goose */}
       <ChatWidget />
     </div>
   )
