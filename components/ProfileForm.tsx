@@ -14,7 +14,11 @@ interface UserProfile {
   updatedAt?: string;
 }
 
-export default function ProfileForm() {
+interface ProfileFormProps {
+  onSuccess?: () => void;
+}
+
+export default function ProfileForm({ onSuccess }: ProfileFormProps) {
   const { user } = useUser();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -128,6 +132,13 @@ export default function ProfileForm() {
         setProfile(data.profile);
         setMessage('Profile saved successfully!');
         setImageFiles({ image1: null, image2: null });
+        
+        // Auto-navigate to step 2 after 1 second
+        if (onSuccess) {
+          setTimeout(() => {
+            onSuccess();
+          }, 1000);
+        }
       } else {
         setMessage(`Error: ${data.error}`);
       }

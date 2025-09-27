@@ -117,7 +117,7 @@ export default function Detect() {
               {/* Show Profile Form for Step 1 when user is signed in */}
               {activeStep === 1 && user && (
                 <div className="flex justify-center">
-                  <ProfileForm />
+                  <ProfileForm onSuccess={() => setActiveStep(2)} />
                 </div>
               )}
             </div>
