@@ -1,6 +1,7 @@
 'use client'
 
 import Navbar from '@/components/Navbar'
+import ProfileForm from '@/components/ProfileForm'
 import { useState } from 'react'
 import { useUser } from '@auth0/nextjs-auth0/client'
 
@@ -69,9 +70,12 @@ export default function Detect() {
               <h2 className="text-2xl font-oswald font-bold text-white mb-6">
                 {steps[activeStep - 1].title}
               </h2>
-              <p className="text-lg font-author text-white/80 leading-relaxed">
+              <p className="text-lg font-author text-white/80 leading-relaxed mb-6">
                 {steps[activeStep - 1].content}
               </p>
+              
+              {/* Show Profile Form for Step 1 when user is signed in */}
+              {activeStep === 1 && user && <ProfileForm />}
             </div>
           </div>
 
