@@ -21,12 +21,13 @@ export default function ChatWidget() {
   ])
   const [inputText, setInputText] = useState('')
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputText.trim()) return
 
+    const userMessage = inputText
     const newMessage: Message = {
       id: messages.length + 1,
-      text: inputText,
+      text: userMessage,
       isUser: true,
       timestamp: new Date()
     }
@@ -34,43 +35,54 @@ export default function ChatWidget() {
     setMessages(prev => [...prev, newMessage])
     setInputText('')
 
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponse: Message = {
-        id: messages.length + 2,
-        text: generateBotResponse(inputText),
-        isUser: false,
-        timestamp: new Date()
-      }
-      setMessages(prev => [...prev, botResponse])
-    }, 1000)
+    // Add loading message
+    const loadingMessage: Message = {
+      id: messages.length + 2,
+      text: "Thinking...",
+      isUser: false,
+      timestamp: new Date()
+    }
+    setMessages(prev => [...prev, loadingMessage])
+
+    try {
+      // Call Gemini API
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: userMessage }),
+      })
+
+      const data = await response.json()
+      
+      // Remove loading message and add AI response
+      setMessages(prev => {
+        const withoutLoading = prev.filter(msg => msg.id !== loadingMessage.id)
+        const botResponse: Message = {
+          id: messages.length + 2,
+          text: data.response || "I'm sorry, I couldn't process your request. Please try again.",
+          isUser: false,
+          timestamp: new Date()
+        }
+        return [...withoutLoading, botResponse]
+      })
+    } catch (error) {
+      console.error('Error getting AI response:', error)
+      // Remove loading message and add error response
+      setMessages(prev => {
+        const withoutLoading = prev.filter(msg => msg.id !== loadingMessage.id)
+        const errorResponse: Message = {
+          id: messages.length + 2,
+          text: "I'm having trouble connecting right now. Please try again later.",
+          isUser: false,
+          timestamp: new Date()
+        }
+        return [...withoutLoading, errorResponse]
+      })
+    }
   }
 
-  const generateBotResponse = (userInput: string): string => {
-    const input = userInput.toLowerCase()
-    
-    if (input.includes('deepfake') || input.includes('deep fake')) {
-      return "Deepfakes are AI-generated synthetic media that can create realistic but fake videos, images, or audio. They're becoming increasingly sophisticated and can be used for misinformation, fraud, or harassment. It's important to verify sources and be cautious of suspicious content."
-    }
-    
-    if (input.includes('phishing') || input.includes('email')) {
-      return "Phishing is a cyber attack where criminals try to trick you into revealing sensitive information through fake emails, websites, or messages. Look for red flags like urgent requests, suspicious links, poor grammar, or requests for passwords or personal information."
-    }
-    
-    if (input.includes('safe') || input.includes('protection') || input.includes('security')) {
-      return "To stay safe online: 1) Verify sources before trusting content, 2) Use strong, unique passwords, 3) Be cautious of unsolicited messages, 4) Keep software updated, 5) Enable two-factor authentication when possible."
-    }
-    
-    if (input.includes('detect') || input.includes('identify')) {
-      return "To detect deepfakes: Look for unnatural facial movements, inconsistent lighting or shadows, unusual blinking patterns, or audio that doesn't match lip movements. Trust your instincts - if something seems off, it might be fake."
-    }
-    
-    if (input.includes('help') || input.includes('learn')) {
-      return "I can help you with: 1) Understanding deepfakes and how to spot them, 2) Learning about phishing attacks and protection, 3) General online safety tips, 4) Explaining current cybersecurity threats. What would you like to know more about?"
-    }
-    
-    return "That's an interesting question! I'm here to help with digital safety topics like deepfakes, phishing, and online security. Could you be more specific about what you'd like to learn about?"
-  }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
