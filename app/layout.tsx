@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { UserProvider } from '@auth0/nextjs-auth0/client'
+import { ProgressProvider } from '@/lib/progress-context'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
@@ -38,13 +39,15 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <UserProvider>
-          <div className="min-h-screen flex flex-col bg-white dark:bg-navy">
-            <Navbar />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
+          <ProgressProvider>
+            <div className="min-h-screen flex flex-col bg-white dark:bg-navy">
+              <Navbar />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </ProgressProvider>
         </UserProvider>
       </body>
     </html>

@@ -56,12 +56,18 @@ export async function getLatestDeepfakeNews(): Promise<NewsArticle[]> {
           const description = article.description?.toLowerCase() || ''
           const content = `${title} ${description}`
           
-          // Check for relevant topics
+          // Check for relevant topics (broader search)
           const isRelevant = content.includes('deepfake') || 
                            content.includes('phishing') || 
                            content.includes('ai scam') ||
-                           content.includes('artificial intelligence scam') ||
-                           content.includes('ai fraud')
+                           content.includes('artificial intelligence') ||
+                           content.includes('ai fraud') ||
+                           content.includes('cybersecurity') ||
+                           content.includes('digital safety') ||
+                           content.includes('online security') ||
+                           content.includes('ai safety') ||
+                           content.includes('machine learning') ||
+                           content.includes('neural network')
           
           // Filter out inappropriate content
           const isAppropriate = !content.includes('explicit') && 
@@ -71,7 +77,7 @@ export async function getLatestDeepfakeNews(): Promise<NewsArticle[]> {
           
           return isRelevant && isAppropriate && article.title && article.description
         })
-        .slice(0, 4) // Limit to 4 articles
+        .slice(0, 6) // Get up to 6 articles
         .map((article: any) => ({
           title: article.title,
           description: article.description,
@@ -82,7 +88,10 @@ export async function getLatestDeepfakeNews(): Promise<NewsArticle[]> {
           }
         }))
 
-      return filteredArticles
+      // If we have at least 2 articles, return them, otherwise use fallback
+      if (filteredArticles.length >= 2) {
+        return filteredArticles.slice(0, 4) // Return up to 4 articles
+      }
     }
 
     // Fallback to curated articles if NewsAPI fails
@@ -123,6 +132,20 @@ function getFallbackArticles(): NewsArticle[] {
       url: "https://example.com/deepfake-tools-review",
       publishedAt: new Date(Date.now() - 259200000).toISOString(),
       source: { name: "Digital Forensics Today" }
+    },
+    {
+      title: "Cybersecurity Awareness: Protecting Yourself from AI-Powered Scams",
+      description: "Learn how to identify and avoid sophisticated AI-powered scams targeting individuals and businesses.",
+      url: "https://example.com/ai-scam-awareness",
+      publishedAt: new Date(Date.now() - 345600000).toISOString(),
+      source: { name: "Security Today" }
+    },
+    {
+      title: "The Future of Digital Forensics in the Age of Deepfakes",
+      description: "How digital forensics experts are adapting their techniques to detect increasingly sophisticated deepfake content.",
+      url: "https://example.com/digital-forensics-future",
+      publishedAt: new Date(Date.now() - 432000000).toISOString(),
+      source: { name: "Forensics Weekly" }
     }
   ]
 }

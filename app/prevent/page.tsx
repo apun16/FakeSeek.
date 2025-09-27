@@ -18,15 +18,26 @@ interface NewsArticle {
 
 export default function Prevent() {
   const [progress, setProgress] = useState(45) // Default progress
+  const [progressLoading, setProgressLoading] = useState(true)
   const [news, setNews] = useState<NewsArticle[]>([])
   const [newsLoading, setNewsLoading] = useState(true)
   const { user, error, isLoading } = useUser()
 
   useEffect(() => {
     // Load progress from localStorage
-    const savedProgress = localStorage.getItem('digitalPassportProgress')
-    if (savedProgress) {
-      setProgress(parseInt(savedProgress))
+    try {
+      const savedProgress = localStorage.getItem('digitalPassportProgress')
+      if (savedProgress) {
+        const progressValue = parseInt(savedProgress)
+        if (!isNaN(progressValue) && progressValue >= 0 && progressValue <= 100) {
+          setProgress(progressValue)
+        }
+      }
+    } catch (error) {
+      console.error('Error loading progress from localStorage:', error)
+      // Keep default progress of 45
+    } finally {
+      setProgressLoading(false)
     }
   }, [])
 
@@ -86,7 +97,7 @@ export default function Prevent() {
   }
   return (
     <div className="min-h-screen bg-white dark:bg-navy"> 
-      <main className="flex items-center justify-center h-[calc(100vh-4rem)]">
+      <main className="flex items-center justify-center min-h-[calc(100vh-4rem)] py-8">
         <div className="w-full max-w-6xl">
           
           {/* Digital Passport Progress Bar */}
@@ -95,13 +106,21 @@ export default function Prevent() {
               <h3 className="text-xl font-oswald font-semibold text-black dark:text-white">
                 Digital Passport Progress
               </h3>
-              <span className="text-black/70 dark:text-white/70">{progress}% Complete</span>
+              {progressLoading ? (
+                <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-4 w-16 rounded"></div>
+              ) : (
+                <span className="text-black/70 dark:text-white/70">{progress}% Complete</span>
+              )}
             </div>
             
             {/* Progress Bar with Benchmarks */}
             <div className="relative mb-8">
               <div className="bg-gray-200 dark:bg-white/20 rounded-full h-4 overflow-hidden">
-                <div className="bg-gradient-to-r from-orange to-orange/80 dark:from-orange dark:to-orange/70 h-full rounded-full transition-all duration-500" style={{width: `${progress}%`}}></div>
+                {progressLoading ? (
+                  <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-full rounded-full"></div>
+                ) : (
+                  <div className="bg-gradient-to-r from-orange to-orange/80 dark:from-orange dark:to-orange/70 h-full rounded-full transition-all duration-500" style={{width: `${progress}%`}}></div>
+                )}
               </div>
               
               {/* Benchmarks */}
@@ -139,7 +158,7 @@ export default function Prevent() {
              
           {/* Learn and News boxes */}
           <div className="flex gap-8 justify-center w-full mt-8">
-            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[28rem] flex-1 hover:bg-orange/35 dark:hover:bg-white/15 transition-colors cursor-pointer flex flex-col">
+            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[36rem] flex-1 hover:bg-orange/35 dark:hover:bg-white/15 transition-colors cursor-pointer flex flex-col">
               <h2 className="text-3xl font-oswald font-bold text-black dark:text-white text-center mb-6">
                 Learn
               </h2>
@@ -164,10 +183,20 @@ export default function Prevent() {
                     </p>
                   </div>
                 </Link>
+                <Link href="/learn" className="block">
+                  <div className="bg-orange/20 dark:bg-white/10 rounded-lg p-6 hover:bg-orange/30 dark:hover:bg-white/20 transition-colors cursor-pointer">
+                    <h3 className="text-xl font-oswald font-semibold text-black dark:text-white text-center">
+                      AI Safety Quiz
+                    </h3>
+                    <p className="text-black/70 dark:text-white/70 text-center mt-2 text-sm">
+                      Test your knowledge about AI, deepfakes, and digital safety
+                    </p>
+                  </div>
+                </Link>
               </div>
             </div>
             
-            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[28rem] flex-1 hover:bg-orange/35 dark:hover:bg-white/15 transition-colors cursor-pointer overflow-y-auto">
+            <div className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[36rem] flex-1 hover:bg-orange/35 dark:hover:bg-white/15 transition-colors cursor-pointer overflow-y-auto">
               <h2 className="text-3xl font-oswald font-bold text-black dark:text-white text-center mb-6">
                 Latest News
               </h2>
