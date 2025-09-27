@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
+import ChatWidget from '@/components/ChatWidget'
 import Link from 'next/link'
 
 export default function Prevent() {
@@ -105,50 +106,61 @@ export default function Prevent() {
               
               {/* News Articles */}
               <div className="space-y-4">
-                <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
-                  <h3 className="text-white font-semibold text-sm mb-2">
-                    AI-Generated Deepfakes Surge 900% in 2024
-                  </h3>
-                  <p className="text-white/70 text-xs">
-                    Cybersecurity experts report unprecedented rise in deepfake attacks targeting businesses and individuals...
-                  </p>
-                  <div className="text-white/50 text-xs mt-2">Dec 15, 2024</div>
-                </div>
+                <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
+                  <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                    <h3 className="text-white font-semibold text-sm mb-2">
+                      AI-Generated Deepfakes Surge 900% in 2024
+                    </h3>
+                    <p className="text-white/70 text-xs">
+                      Cybersecurity experts report unprecedented rise in deepfake attacks targeting businesses and individuals...
+                    </p>
+                    <div className="text-white/50 text-xs mt-2">Dec 15, 2024</div>
+                  </div>
+                </a>
                 
-                <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
-                  <h3 className="text-white font-semibold text-sm mb-2">
-                    New Deepfake Detection Tools Launched
-                  </h3>
-                  <p className="text-white/70 text-xs">
-                    Tech companies introduce advanced AI systems to identify and flag synthetic media content...
-                  </p>
-                  <div className="text-white/50 text-xs mt-2">Dec 12, 2024</div>
-                </div>
+                <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
+                  <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                    <h3 className="text-white font-semibold text-sm mb-2">
+                      New Deepfake Detection Tools Launched
+                    </h3>
+                    <p className="text-white/70 text-xs">
+                      Tech companies introduce advanced AI systems to identify and flag synthetic media content...
+                    </p>
+                    <div className="text-white/50 text-xs mt-2">Dec 12, 2024</div>
+                  </div>
+                </a>
                 
-                <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
-                  <h3 className="text-white font-semibold text-sm mb-2">
-                    Political Deepfakes Threaten Elections
-                  </h3>
-                  <p className="text-white/70 text-xs">
-                    Governments worldwide scramble to implement regulations as deepfake technology advances rapidly...
-                  </p>
-                  <div className="text-white/50 text-xs mt-2">Dec 10, 2024</div>
-                </div>
+                <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
+                  <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                    <h3 className="text-white font-semibold text-sm mb-2">
+                      Political Deepfakes Threaten Elections
+                    </h3>
+                    <p className="text-white/70 text-xs">
+                      Governments worldwide scramble to implement regulations as deepfake technology advances rapidly...
+                    </p>
+                    <div className="text-white/50 text-xs mt-2">Dec 10, 2024</div>
+                  </div>
+                </a>
                 
-                <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
-                  <h3 className="text-white font-semibold text-sm mb-2">
-                    Celebrities Fight Back Against Deepfakes
-                  </h3>
-                  <p className="text-white/70 text-xs">
-                    Hollywood stars and influencers take legal action against unauthorized AI-generated content...
-                  </p>
-                  <div className="text-white/50 text-xs mt-2">Dec 8, 2024</div>
-                </div>
+                <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
+                  <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                    <h3 className="text-white font-semibold text-sm mb-2">
+                      Celebrities Fight Back Against Deepfakes
+                    </h3>
+                    <p className="text-white/70 text-xs">
+                      Hollywood stars and influencers take legal action against unauthorized AI-generated content...
+                    </p>
+                    <div className="text-white/50 text-xs mt-2">Dec 8, 2024</div>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
         </div>
       </main>
+      
+      {/* Chat Widget */}
+      <ChatWidget />
     </div>
   )
 }
