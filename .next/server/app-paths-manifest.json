@@ -1,3 +1,5 @@
 {
+  "/spot-deepfake/page": "app/spot-deepfake/page.js",
+  "/phishing-protection/page": "app/phishing-protection/page.js",
   "/prevent/page": "app/prevent/page.js"
 }

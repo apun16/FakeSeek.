@@ -1,52 +1,150 @@
+'use client'
+
+import { useState, useEffect } from 'react'
 import Navbar from '@/components/Navbar'
+import Link from 'next/link'
 
 export default function Prevent() {
+  const [progress, setProgress] = useState(45) // Default progress
+
+  useEffect(() => {
+    // Load progress from localStorage
+    const savedProgress = localStorage.getItem('digitalPassportProgress')
+    if (savedProgress) {
+      setProgress(parseInt(savedProgress))
+    }
+  }, [])
   return (
     <div className="min-h-screen bg-navy">
       
       <main className="flex items-center justify-center h-[calc(100vh-4rem)]">
         <div className="w-full max-w-6xl">
           
-          {/* Progress Bar */}
-          <div className="w-full mb-8">
-            <div className="bg-white/20 rounded-full h-3 overflow-hidden">
-              <div className="bg-gradient-to-r from-blue-400 to-purple-500 h-full w-3/4 rounded-full transition-all duration-500"></div>
+          {/* Digital Passport Progress Bar */}
+          <div className="w-full mb-16">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-oswald font-semibold text-white">
+                Digital Passport Progress
+              </h3>
+              <span className="text-white/70">{progress}% Complete</span>
             </div>
-          </div>
-             
-          {/* Learn and News boxes */}
-          <div className="flex gap-8 justify-center w-full">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 h-96 flex-1 hover:bg-white/15 transition-colors cursor-pointer flex flex-col">
-              <h2 className="text-3xl font-oswald font-bold text-white text-center mb-6">
-                Learn
-              </h2>
-              <div className="flex-1 flex flex-col gap-4">
-                <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-colors cursor-pointer">
-                  <h3 className="text-xl font-oswald font-semibold text-white text-center">
-                    Spot the Deepfake
-                  </h3>
-                  <p className="text-white/70 text-center mt-2 text-sm">
-                    Learn to identify AI-generated content
-                  </p>
+            
+            {/* Progress Bar with Benchmarks */}
+            <div className="relative mb-8">
+              <div className="bg-white/20 rounded-full h-4 overflow-hidden">
+                <div className="bg-gradient-to-r from-blue-400 to-purple-500 h-full rounded-full transition-all duration-500" style={{width: `${progress}%`}}></div>
+              </div>
+              
+              {/* Benchmarks */}
+              <div className="absolute top-0 w-full h-4 flex justify-between">
+                <div className="flex flex-col items-center">
+                  <div className="w-1 h-4 bg-white/40 rounded-full"></div>
+                  <div className="text-xs text-white/70 mt-6">Novice<br/>0%</div>
                 </div>
-                <div className="bg-white/10 rounded-lg p-4 hover:bg-white/20 transition-colors cursor-pointer">
-                  <h3 className="text-xl font-oswald font-semibold text-white text-center">
-                    Phishing Protection
-                  </h3>
-                  <p className="text-white/70 text-center mt-2 text-sm">
-                    Protect yourself from phishing attacks
-                  </p>
+                <div className="flex flex-col items-center">
+                  <div className="w-1 h-4 bg-white/40 rounded-full"></div>
+                  <div className="text-xs text-white/70 mt-6">Privacy Protector<br/>25%</div>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-1 h-4 bg-white/40 rounded-full"></div>
+                  <div className="text-xs text-white/70 mt-6">Phishing Fighter<br/>50%</div>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-1 h-4 bg-white/40 rounded-full"></div>
+                  <div className="text-xs text-white/70 mt-6">Deepfake Detective<br/>75%</div>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-1 h-4 bg-white/40 rounded-full"></div>
+                  <div className="text-xs text-white/70 mt-6">Expert Privacy Passport<br/>100%</div>
                 </div>
               </div>
             </div>
             
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 h-96 flex-1 hover:bg-white/15 transition-colors cursor-pointer">
-              <h2 className="text-3xl font-oswald font-bold text-white text-center">
-                News
-              </h2>
-              <p className="text-white/70 text-center mt-4 text-lg">
-                Latest updates and articles
+            {/* Progress Details */}
+            <div className="text-center mt-20">
+              <p className="text-white/70 text-sm">
+                Complete modules and quizzes to advance your digital literacy level
               </p>
+            </div>
+          </div>
+             
+          {/* Learn and News boxes */}
+          <div className="flex gap-8 justify-center w-full mt-8">
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[28rem] flex-1 hover:bg-white/15 transition-colors cursor-pointer flex flex-col">
+              <h2 className="text-3xl font-oswald font-bold text-white text-center mb-6">
+                Learn
+              </h2>
+              <div className="flex-1 flex flex-col justify-center gap-6">
+                <Link href="/spot-deepfake" className="block">
+                  <div className="bg-white/10 rounded-lg p-6 hover:bg-white/20 transition-colors cursor-pointer">
+                    <h3 className="text-xl font-oswald font-semibold text-white text-center">
+                      Spot the Deepfake
+                    </h3>
+                    <p className="text-white/70 text-center mt-2 text-sm">
+                      View the how realistic a deepfake is from the real photo
+                    </p>
+                  </div>
+                </Link>
+                <Link href="/phishing-protection" className="block">
+                  <div className="bg-white/10 rounded-lg p-6 hover:bg-white/20 transition-colors cursor-pointer">
+                    <h3 className="text-xl font-oswald font-semibold text-white text-center">
+                      Phishing Protection
+                    </h3>
+                    <p className="text-white/70 text-center mt-2 text-sm">
+                      Protect yourself from phishing attacks
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 h-[28rem] flex-1 hover:bg-white/15 transition-colors cursor-pointer overflow-y-auto">
+              <h2 className="text-3xl font-oswald font-bold text-white text-center mb-6">
+                Latest News
+              </h2>
+              
+              {/* News Articles */}
+              <div className="space-y-4">
+                <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                  <h3 className="text-white font-semibold text-sm mb-2">
+                    AI-Generated Deepfakes Surge 900% in 2024
+                  </h3>
+                  <p className="text-white/70 text-xs">
+                    Cybersecurity experts report unprecedented rise in deepfake attacks targeting businesses and individuals...
+                  </p>
+                  <div className="text-white/50 text-xs mt-2">Dec 15, 2024</div>
+                </div>
+                
+                <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                  <h3 className="text-white font-semibold text-sm mb-2">
+                    New Deepfake Detection Tools Launched
+                  </h3>
+                  <p className="text-white/70 text-xs">
+                    Tech companies introduce advanced AI systems to identify and flag synthetic media content...
+                  </p>
+                  <div className="text-white/50 text-xs mt-2">Dec 12, 2024</div>
+                </div>
+                
+                <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                  <h3 className="text-white font-semibold text-sm mb-2">
+                    Political Deepfakes Threaten Elections
+                  </h3>
+                  <p className="text-white/70 text-xs">
+                    Governments worldwide scramble to implement regulations as deepfake technology advances rapidly...
+                  </p>
+                  <div className="text-white/50 text-xs mt-2">Dec 10, 2024</div>
+                </div>
+                
+                <div className="bg-white/5 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                  <h3 className="text-white font-semibold text-sm mb-2">
+                    Celebrities Fight Back Against Deepfakes
+                  </h3>
+                  <p className="text-white/70 text-xs">
+                    Hollywood stars and influencers take legal action against unauthorized AI-generated content...
+                  </p>
+                  <div className="text-white/50 text-xs mt-2">Dec 8, 2024</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
