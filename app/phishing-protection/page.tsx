@@ -148,27 +148,58 @@ export default function PhishingProtection() {
           {/* Email List */}
           <div className="mb-8">
             <h2 className="text-2xl font-oswald font-semibold text-black dark:text-white mb-4 text-center">
-              Emails to Sort
+              Emails to Sort ({emails.filter(email => 
+                !safeEmails.some(safe => safe.id === email.id) && 
+                !suspiciousEmails.some(suspicious => suspicious.id === email.id)
+              ).length})
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {emails.map(email => (
-                <div
-                  key={email.id}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, email)}
-                  className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-lg p-4 cursor-move hover:bg-black/15 dark:hover:bg-white/15 transition-colors"
-                >
-                  <div className="text-black dark:text-white font-semibold text-sm mb-2">
-                    From: {email.sender}
+              {emails
+                .filter(email => 
+                  !safeEmails.some(safe => safe.id === email.id) && 
+                  !suspiciousEmails.some(suspicious => suspicious.id === email.id)
+                )
+                .length === 0 ? (
+                  <div className="col-span-full text-center py-12">
+                    <div className="text-6xl mb-4">🎉</div>
+                    <h3 className="text-2xl font-oswald font-semibold text-black dark:text-white mb-2">
+                      All Emails Sorted!
+                    </h3>
+                    <p className="text-black/70 dark:text-white/70 mb-6">
+                      Great job! You've sorted all the emails. Click "Check Answers" to see your results.
+                    </p>
+                    <button
+                      onClick={checkAnswers}
+                      className="bg-orange hover:bg-orange/80 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+                    >
+                      Check Answers
+                    </button>
                   </div>
-                  <div className="text-black/90 dark:text-white/90 font-medium mb-2">
-                    {email.subject}
-                  </div>
-                  <div className="text-black/70 dark:text-white/70 text-sm">
-                    {email.content.substring(0, 100)}...
-                  </div>
-                </div>
-              ))}
+                ) : (
+                  emails
+                    .filter(email => 
+                      !safeEmails.some(safe => safe.id === email.id) && 
+                      !suspiciousEmails.some(suspicious => suspicious.id === email.id)
+                    )
+                    .map(email => (
+                    <div
+                      key={email.id}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, email)}
+                      className="bg-orange/30 dark:bg-white/10 backdrop-blur-sm rounded-lg p-4 cursor-move hover:bg-black/15 dark:hover:bg-white/15 transition-colors"
+                    >
+                      <div className="text-black dark:text-white font-semibold text-sm mb-2">
+                        From: {email.sender}
+                      </div>
+                      <div className="text-black/90 dark:text-white/90 font-medium mb-2">
+                        {email.subject}
+                      </div>
+                      <div className="text-black/70 dark:text-white/70 text-sm">
+                        {email.content.substring(0, 100)}...
+                      </div>
+                    </div>
+                  ))
+                )}
             </div>
           </div>
 
@@ -195,8 +226,8 @@ export default function PhishingProtection() {
                     {showResults && (
                       <div className={`text-sm mt-2 p-2 rounded ${
                         email.isSafe 
-                          ? 'bg-green-500/20 text-green-300' 
-                          : 'bg-red-500/20 text-red-300'
+                          ? 'bg-green-500/20 text-green-700 dark:text-green-200' 
+                          : 'bg-red-500/20 text-red-700 dark:text-red-200'
                       }`}>
                         {email.isSafe ? '✅ Correct!' : '❌ Wrong - This is suspicious'}
                         <div className="text-xs mt-1">{email.reason}</div>
@@ -228,8 +259,8 @@ export default function PhishingProtection() {
                     {showResults && (
                       <div className={`text-sm mt-2 p-2 rounded ${
                         !email.isSafe 
-                          ? 'bg-green-500/20 text-green-300' 
-                          : 'bg-red-500/20 text-red-300'
+                          ? 'bg-green-500/20 text-green-700 dark:text-green-200' 
+                          : 'bg-red-500/20 text-red-700 dark:text-red-200'
                       }`}>
                         {!email.isSafe ? '✅ Correct!' : '❌ Wrong - This is safe'}
                         <div className="text-xs mt-1">{email.reason}</div>

@@ -25,19 +25,44 @@ export default function Prevent() {
 
   useEffect(() => {
     // Load progress from localStorage
-    try {
-      const savedProgress = localStorage.getItem('digitalPassportProgress')
-      if (savedProgress) {
-        const progressValue = parseInt(savedProgress)
-        if (!isNaN(progressValue) && progressValue >= 0 && progressValue <= 100) {
-          setProgress(progressValue)
+    const loadProgress = () => {
+      try {
+        const savedProgress = localStorage.getItem('digitalPassportProgress')
+        if (savedProgress) {
+          const progressValue = parseInt(savedProgress)
+          if (!isNaN(progressValue) && progressValue >= 0 && progressValue <= 100) {
+            setProgress(progressValue)
+          }
         }
+      } catch (error) {
+        console.error('Error loading progress from localStorage:', error)
+        // Keep default progress of 45
+      } finally {
+        setProgressLoading(false)
       }
-    } catch (error) {
-      console.error('Error loading progress from localStorage:', error)
-      // Keep default progress of 45
-    } finally {
-      setProgressLoading(false)
+    }
+
+    loadProgress()
+
+    // Listen for storage changes to update progress when user returns from other pages
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'digitalPassportProgress') {
+        loadProgress()
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    
+    // Also listen for focus events to refresh progress when user returns to tab
+    const handleFocus = () => {
+      loadProgress()
+    }
+    
+    window.addEventListener('focus', handleFocus)
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('focus', handleFocus)
     }
   }, [])
 
@@ -104,7 +129,7 @@ export default function Prevent() {
           <div className="w-full mb-16">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-oswald font-semibold text-black dark:text-white">
-                Digital Passport Progress
+                Prevention Progress Bar
               </h3>
               {progressLoading ? (
                 <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-4 w-16 rounded"></div>

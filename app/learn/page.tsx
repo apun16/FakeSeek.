@@ -193,6 +193,14 @@ export default function LearnPage() {
       updateScore(-1) // -1 point for wrong answer
     }
     
+    // Also update digitalPassportProgress for the prevention progress bar
+    const currentProgress = localStorage.getItem('digitalPassportProgress') || '0'
+    const currentScore = parseInt(currentProgress)
+    const progressChange = isCorrect ? 2 : -1 // Same as digital safety score
+    const newProgress = Math.max(0, Math.min(100, currentScore + progressChange))
+    localStorage.setItem('digitalPassportProgress', newProgress.toString())
+    localStorage.setItem('lastActivity', 'ai_safety_quiz')
+    
     setShowResult(true)
   }
 
@@ -226,8 +234,25 @@ export default function LearnPage() {
       }
     })
 
+    // Give bonus points for completing the quiz
+    const quizScore = Math.round((correctAnswers / quizQuestions.length) * 100)
+    const currentProgress = localStorage.getItem('digitalPassportProgress') || '0'
+    const currentScore = parseInt(currentProgress)
+    let bonusPoints = 0
+    
+    if (quizScore >= 80) {
+      bonusPoints = 5 // Bonus for excellent performance
+    } else if (quizScore >= 60) {
+      bonusPoints = 3 // Bonus for good performance
+    } else {
+      bonusPoints = 1 // Small bonus for completion
+    }
+    
+    const newProgress = Math.max(0, Math.min(100, currentScore + bonusPoints))
+    localStorage.setItem('digitalPassportProgress', newProgress.toString())
+
     setQuizResult({
-      score: Math.round((correctAnswers / quizQuestions.length) * 100),
+      score: quizScore,
       totalQuestions: quizQuestions.length,
       correctAnswers,
       wrongAnswers,
