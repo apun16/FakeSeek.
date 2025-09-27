@@ -9,8 +9,8 @@ import Footer from '@/components/Footer'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'FakeSeek - Detect and Prevent Fake News',
-  description: 'A platform to detect and prevent fake news through advanced scanning and education',
+  title: 'FakeSeek - Detection and Prevention',
+  description: 'A platform to detect and warn users about the dangers of deepfakes and phishing attacks to educatethem about how to protect themselves online',
 }
 
 export default function RootLayout({

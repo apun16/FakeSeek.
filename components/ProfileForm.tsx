@@ -14,7 +14,12 @@ interface UserProfile {
   updatedAt?: string;
 }
 
-export default function ProfileForm() {
+interface ProfileFormProps {
+  onSuccess?: () => void;
+  onNewProfile?: () => void;
+}
+
+export default function ProfileForm({ onSuccess, onNewProfile }: ProfileFormProps) {
   const { user } = useUser();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -128,6 +133,18 @@ export default function ProfileForm() {
         setProfile(data.profile);
         setMessage('Profile saved successfully!');
         setImageFiles({ image1: null, image2: null });
+        
+        // Call onNewProfile to reset scan state if provided
+        if (onNewProfile) {
+          onNewProfile();
+        }
+        
+        // Auto-navigate to step 2 after 1 second
+        if (onSuccess) {
+          setTimeout(() => {
+            onSuccess();
+          }, 1000);
+        }
       } else {
         setMessage(`Error: ${data.error}`);
       }
@@ -149,14 +166,14 @@ export default function ProfileForm() {
 
   return (
     <div className="bg-white/10 border border-white/20 rounded-lg p-6">
-      <h3 className="text-xl font-oswald font-bold text-white mb-6">
+      <h3 className="text-xl font-oswald font-bold text-gray-900 dark:text-white mb-6">
         Complete Your Profile
       </h3>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="firstName" className="block text-sm font-author font-medium text-white mb-2">
+            <label htmlFor="firstName" className="block text-sm font-author font-medium text-gray-900 dark:text-white mb-2">
               First Name *
             </label>
             <input
@@ -166,13 +183,13 @@ export default function ProfileForm() {
               value={formData.firstName}
               onChange={handleInputChange}
               required
-              className="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange focus:border-transparent"
+              className="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange focus:border-transparent"
               placeholder="Enter your first name"
             />
           </div>
           
           <div>
-            <label htmlFor="lastName" className="block text-sm font-author font-medium text-white mb-2">
+            <label htmlFor="lastName" className="block text-sm font-author font-medium text-gray-900 dark:text-white mb-2">
               Last Name *
             </label>
             <input
@@ -182,7 +199,7 @@ export default function ProfileForm() {
               value={formData.lastName}
               onChange={handleInputChange}
               required
-              className="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange focus:border-transparent"
+              className="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange focus:border-transparent"
               placeholder="Enter your last name"
             />
           </div>
@@ -190,7 +207,7 @@ export default function ProfileForm() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="image1" className="block text-sm font-author font-medium text-white mb-2">
+            <label htmlFor="image1" className="block text-sm font-author font-medium text-gray-900 dark:text-white mb-2">
               Profile Image 1
             </label>
             <input
@@ -198,7 +215,7 @@ export default function ProfileForm() {
               id="image1"
               accept="image/*"
               onChange={(e) => handleImageChange(e, 'image1')}
-              className="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-author file:bg-orange file:text-white hover:file:bg-orange/80"
+              className="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-author file:bg-orange file:text-white hover:file:bg-orange/80"
             />
             {formData.profileImage1 && !imageFiles.image1 && (
               <div className="mt-2">
@@ -212,7 +229,7 @@ export default function ProfileForm() {
           </div>
           
           <div>
-            <label htmlFor="image2" className="block text-sm font-author font-medium text-white mb-2">
+            <label htmlFor="image2" className="block text-sm font-author font-medium text-gray-900 dark:text-white mb-2">
               Profile Image 2
             </label>
             <input
@@ -220,7 +237,7 @@ export default function ProfileForm() {
               id="image2"
               accept="image/*"
               onChange={(e) => handleImageChange(e, 'image2')}
-              className="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-author file:bg-orange file:text-white hover:file:bg-orange/80"
+              className="w-full px-3 py-2 bg-white/10 border border-white/30 rounded-lg text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-author file:bg-orange file:text-white hover:file:bg-orange/80"
             />
             {formData.profileImage2 && !imageFiles.image2 && (
               <div className="mt-2">
@@ -237,8 +254,8 @@ export default function ProfileForm() {
         {message && (
           <div className={`p-3 rounded-lg text-sm font-author ${
             message.includes('Error') 
-              ? 'bg-red-500/20 text-red-300 border border-red-500/50' 
-              : 'bg-green-500/20 text-green-300 border border-green-500/50'
+              ? 'bg-red-500/20 text-red-800 dark:text-red-300 border border-red-500/50' 
+              : 'bg-green-500/20 text-green-800 dark:text-green-300 border border-green-500/50'
           }`}>
             {message}
           </div>
