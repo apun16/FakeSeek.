@@ -28,12 +28,11 @@ export default function Detect() {
   ]
 
   return (
-    <div className="min-h-screen bg-navy">
-      <Navbar />
+    <div className="min-h-screen bg-white dark:bg-navy">
       <main className="flex h-[calc(100vh-4rem)]">
         {/* Left Side - Step Buttons */}
-        <div className="w-1/3 p-8 border-r border-white/20">
-          <h1 className="text-3xl font-oswald font-bold text-white mb-8">
+        <div className="w-1/3 p-8 border-r border-gray-200 dark:border-white/20">
+          <h1 className="text-3xl font-oswald font-bold text-gray-900 dark:text-white mb-8">
             Detection Process
           </h1>
           <div className="space-y-4">
@@ -44,7 +43,7 @@ export default function Detect() {
                 className={`w-full p-6 text-left rounded-lg border-2 transition-all duration-300 ${
                   activeStep === step.id
                     ? 'border-orange bg-orange/10 text-orange'
-                    : 'border-white/30 bg-white/5 text-white hover:border-orange/50 hover:bg-orange/5'
+                    : 'border-gray-300 dark:border-white/30 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white hover:border-orange/50 hover:bg-orange/5'
                 }`}
               >
                 <h3 className="text-lg font-oswald font-semibold mb-2">
@@ -52,8 +51,8 @@ export default function Detect() {
                 </h3>
                 <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${
                   activeStep === step.id
-                    ? 'border-orange bg-orange text-navy'
-                    : 'border-white/50 text-white/50'
+                    ? 'border-orange bg-orange text-white'
+                    : 'border-gray-400 dark:border-white/50 text-gray-600 dark:text-white/50'
                 }`}>
                   {step.id}
                 </div>
@@ -66,11 +65,11 @@ export default function Detect() {
         <div className="w-2/3 p-8">
           {/* Step Content */}
           <div className="mt-8">
-            <div className="bg-white/10 border border-white/20 rounded-lg p-8 h-96 overflow-y-auto">
-              <h2 className="text-2xl font-oswald font-bold text-white mb-6">
+            <div className="bg-gray-50 dark:bg-white/10 border border-gray-200 dark:border-white/20 rounded-lg p-8 h-96 overflow-y-auto">
+              <h2 className="text-2xl font-oswald font-bold text-gray-900 dark:text-white mb-6">
                 {steps[activeStep - 1].title}
               </h2>
-              <p className="text-lg font-author text-white/80 leading-relaxed mb-6">
+              <p className="text-lg font-inter text-gray-700 dark:text-white/80 leading-relaxed mb-6">
                 {steps[activeStep - 1].content}
               </p>
               
@@ -80,11 +79,11 @@ export default function Detect() {
           </div>
 
           {/* Authentication Section */}
-          <div className="mt-8 bg-white/5 border border-white/20 rounded-lg p-6">
-            <h3 className="text-xl font-oswald font-bold text-white mb-4">
+          <div className="mt-8 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/20 rounded-lg p-6">
+            <h3 className="text-xl font-oswald font-bold text-gray-900 dark:text-white mb-4">
               Authentication Required
             </h3>
-            <p className="text-sm font-author text-white/70 mb-6">
+            <p className="text-sm font-inter text-gray-600 dark:text-white/70 mb-6">
               Please sign in to access the full detection features.
             </p>
             
@@ -101,17 +100,17 @@ export default function Detect() {
                     className="w-12 h-12 rounded-full"
                   />
                   <div>
-                    <p className="text-white font-author font-medium">
+                    <p className="text-gray-900 dark:text-white font-inter font-medium">
                       Welcome, {user.name}
                     </p>
-                    <p className="text-white/60 text-sm">
+                    <p className="text-gray-600 dark:text-white/60 text-sm">
                       {user.email}
                     </p>
                   </div>
                 </div>
                 <a
                   href="/api/auth/logout"
-                  className="block w-full bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-author font-medium transition-colors duration-200 text-center"
+                  className="block w-full bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-inter font-medium transition-colors duration-200 text-center"
                 >
                   Sign Out
                 </a>
@@ -119,7 +118,7 @@ export default function Detect() {
             ) : (
               <a
                 href="/api/auth/login"
-                className="block w-full bg-orange hover:bg-orange/80 text-white px-6 py-3 rounded-lg font-author font-medium transition-colors duration-200 text-center"
+                className="block w-full bg-orange hover:bg-orange/80 text-white px-6 py-3 rounded-lg font-inter font-medium transition-colors duration-200 text-center"
               >
                 Sign In with Google
               </a>
@@ -127,7 +126,7 @@ export default function Detect() {
             
             {error && (
               <div className="mt-4 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
-                <p className="text-red-300 text-sm font-author">
+                <p className="text-red-300 text-sm font-inter">
                   Authentication error: {error.message}
                 </p>
               </div>
