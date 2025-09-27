@@ -5,9 +5,12 @@ import Navbar from '@/components/Navbar'
 import ChatWidget from '@/components/ChatWidget'
 import Link from 'next/link'
 import { useUser } from '@auth0/nextjs-auth0/client'
+import { NewsArticle } from '@/lib/gemini'
 
 export default function Prevent() {
   const [progress, setProgress] = useState(45) // Default progress
+  const [news, setNews] = useState<NewsArticle[]>([])
+  const [newsLoading, setNewsLoading] = useState(true)
   const { user, error, isLoading } = useUser()
 
   useEffect(() => {
@@ -16,6 +19,25 @@ export default function Prevent() {
     if (savedProgress) {
       setProgress(parseInt(savedProgress))
     }
+  }, [])
+
+  useEffect(() => {
+    // Fetch latest news when component mounts
+    const fetchNews = async () => {
+      try {
+        const response = await fetch('/api/news')
+        const data = await response.json()
+        setNews(data.news || [])
+      } catch (error) {
+        console.error('Error fetching news:', error)
+        // Set empty array if API fails
+        setNews([])
+      } finally {
+        setNewsLoading(false)
+      }
+    }
+
+    fetchNews()
   }, [])
 
   // Show loading state
@@ -145,53 +167,38 @@ export default function Prevent() {
               
               {/* News Articles */}
               <div className="space-y-4">
-                <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
-                  <div className="bg-orange/20 dark:bg-white/5 rounded-lg p-4 hover:bg-orange/30 dark:hover:bg-white/10 transition-colors">
-                    <h3 className="text-black dark:text-white font-semibold text-sm mb-2">
-                      AI-Generated Deepfakes Surge 900% in 2024
-                    </h3>
-                    <p className="text-black/70 dark:text-white/70 text-xs">
-                      Cybersecurity experts report unprecedented rise in deepfake attacks targeting businesses and individuals...
-                    </p>
-                    <div className="text-black/50 dark:text-white/50 text-xs mt-2">Dec 15, 2024</div>
+                {newsLoading ? (
+                  <div className="flex items-center justify-center h-32">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange"></div>
                   </div>
-                </a>
-                
-                <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
-                  <div className="bg-orange/20 dark:bg-white/5 rounded-lg p-4 hover:bg-orange/30 dark:hover:bg-white/10 transition-colors">
-                    <h3 className="text-black dark:text-white font-semibold text-sm mb-2">
-                      New Deepfake Detection Tools Launched
-                    </h3>
-                    <p className="text-black/70 dark:text-white/70 text-xs">
-                      Tech companies introduce advanced AI systems to identify and flag synthetic media content...
-                    </p>
-                    <div className="text-black/50 dark:text-white/50 text-xs mt-2">Dec 12, 2024</div>
-                  </div>
-                </a>
-                
-                <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
-                  <div className="bg-orange/20 dark:bg-white/5 rounded-lg p-4 hover:bg-orange/30 dark:hover:bg-white/10 transition-colors">
-                    <h3 className="text-black dark:text-white font-semibold text-sm mb-2">
-                      Political Deepfakes Threaten Elections
-                    </h3>
-                    <p className="text-black/70 dark:text-white/70 text-xs">
-                      Governments worldwide scramble to implement regulations as deepfake technology advances rapidly...
-                    </p>
-                    <div className="text-black/50 dark:text-white/50 text-xs mt-2">Dec 10, 2024</div>
-                  </div>
-                </a>
-                
-                <a href="https://www.bbc.com/news/technology-67928138" target="_blank" rel="noopener noreferrer" className="block">
-                  <div className="bg-orange/20 dark:bg-white/5 rounded-lg p-4 hover:bg-orange/30 dark:hover:bg-white/10 transition-colors">
-                    <h3 className="text-black dark:text-white font-semibold text-sm mb-2">
-                      Celebrities Fight Back Against Deepfakes
-                    </h3>
-                    <p className="text-black/70 dark:text-white/70 text-xs">
-                      Hollywood stars and influencers take legal action against unauthorized AI-generated content...
-                    </p>
-                    <div className="text-black/50 dark:text-white/50 text-xs mt-2">Dec 8, 2024</div>
-                  </div>
-                </a>
+                ) : (
+                  news.map((article, index) => (
+                    <a 
+                      key={index}
+                      href={article.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="block"
+                    >
+                      <div className="bg-orange/20 dark:bg-white/5 rounded-lg p-4 hover:bg-orange/30 dark:hover:bg-white/10 transition-colors">
+                        <h3 className="text-black dark:text-white font-semibold text-sm mb-2">
+                          {article.title}
+                        </h3>
+                        <p className="text-black/70 dark:text-white/70 text-xs">
+                          {article.subtitle}
+                        </p>
+                        <div className="flex justify-between items-center mt-2">
+                          <div className="text-black/50 dark:text-white/50 text-xs">
+                            {article.date}
+                          </div>
+                          <div className="text-black/50 dark:text-white/50 text-xs">
+                            {article.source}
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  ))
+                )}
               </div>
             </div>
           </div>
