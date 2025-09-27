@@ -89,7 +89,7 @@ const Footer = () => {
         <div className="border-t border-gray-200 dark:border-white/20 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-500 dark:text-white/60 font-inter text-sm">
-              © 2024 FakeSeek. All rights reserved.
+              © 2025 FakeSeek. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-500 dark:text-white/60 hover:text-orange font-inter text-sm transition-colors duration-200">

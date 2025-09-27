@@ -13,7 +13,6 @@ const Navbar = () => {
     { name: 'Home', href: '/' },
     { name: 'Detect', href: '/detect' },
     { name: 'Prevent', href: '/prevent' },
-    { name: 'About', href: '/about' },
   ]
 
   return (
@@ -56,14 +55,6 @@ const Navbar = () => {
                     alt="Profile" 
                     className="w-8 h-8 rounded-full"
                   />
-                  <div className="text-right">
-                    <p className="text-gray-900 dark:text-white font-inter text-sm font-medium">
-                      {user.name}
-                    </p>
-                    <p className="text-orange text-xs font-inter">
-                      View Profile
-                    </p>
-                  </div>
                 </Link>
                 <a
                   href="/api/auth/logout"
