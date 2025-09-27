@@ -1,6 +1,5 @@
 import ReviewsSlider from '@/components/ReviewsSlider'
 import Link from 'next/link'
-import ProgressIndicator from '@/components/ProgressIndicator'
 
 export default function Home() {
   return (
@@ -14,7 +13,6 @@ export default function Home() {
       </div>
       
       <main className="flex-1 relative z-10">
-        <ProgressIndicator />
         <div className="flex h-[calc(100vh-4rem)]">
           {/* Left Button - Detect and Scan */}
           <Link 

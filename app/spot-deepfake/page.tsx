@@ -3,20 +3,18 @@
 import { useState, useRef } from 'react'
 import { useUser } from '@auth0/nextjs-auth0/client'
 import { DeepfakeAnalysis } from '@/lib/gemini'
-import { createCanvasDeepfakeVariations } from '@/lib/client-deepfake'
 
 export default function SpotDeepfake() {
   const { user, error, isLoading } = useUser()
-  const [originalImage, setOriginalImage] = useState<string | null>(null)
-  const [deepfakeImages, setDeepfakeImages] = useState<string[]>([])
-  const [selectedDeepfake, setSelectedDeepfake] = useState<string | null>(null)
+  const [normalImage, setNormalImage] = useState<string | null>(null)
+  const [deepfakeImage, setDeepfakeImage] = useState<string | null>(null)
   const [analysis, setAnalysis] = useState<DeepfakeAnalysis | null>(null)
-  const [isGenerating, setIsGenerating] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [showResults, setShowResults] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [modalImage, setModalImage] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const normalFileInputRef = useRef<HTMLInputElement>(null)
+  const deepfakeFileInputRef = useRef<HTMLInputElement>(null)
 
   // Show loading state
   if (isLoading) {
@@ -56,14 +54,13 @@ export default function SpotDeepfake() {
     )
   }
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNormalImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
       const reader = new FileReader()
       reader.onload = (e) => {
         const result = e.target?.result as string
-        setOriginalImage(result)
-        setDeepfakeImages([])
+        setNormalImage(result)
         setAnalysis(null)
         setShowResults(false)
       }
@@ -71,34 +68,22 @@ export default function SpotDeepfake() {
     }
   }
 
-  const generateDeepfakes = async () => {
-    if (!originalImage) return
-
-    setIsGenerating(true)
-    try {
-      // Generate deepfake variations client-side
-      const variations = await createCanvasDeepfakeVariations(originalImage)
-      setDeepfakeImages(variations)
-      setSelectedDeepfake(variations[0]) // Select first deepfake by default
-    } catch (error) {
-      console.error('Error generating deepfakes:', error)
-      // Fallback to original image with markers
-      const fallbackVariations = [
-        originalImage + '#subtle',
-        originalImage + '#moderate',
-        originalImage + '#strong',
-        originalImage + '#extreme'
-      ]
-      setDeepfakeImages(fallbackVariations)
-      setSelectedDeepfake(fallbackVariations[0])
-    } finally {
-      setIsGenerating(false)
+  const handleDeepfakeImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const result = e.target?.result as string
+        setDeepfakeImage(result)
+        setAnalysis(null)
+        setShowResults(false)
+      }
+      reader.readAsDataURL(file)
     }
   }
 
-
   const analyzeImages = async () => {
-    if (!originalImage || !selectedDeepfake) return
+    if (!normalImage || !deepfakeImage) return
 
     setIsAnalyzing(true)
     try {
@@ -108,8 +93,8 @@ export default function SpotDeepfake() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          originalImage,
-          deepfakeImage: selectedDeepfake
+          originalImage: normalImage,
+          deepfakeImage: deepfakeImage
         }),
       })
 
@@ -174,122 +159,114 @@ export default function SpotDeepfake() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-oswald font-bold text-gray-900 dark:text-white mb-4">
-            Deepfake Detection Training
+            Deepfake Detection Analysis
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Upload a stock photo or your own image to generate educational deepfake variations and learn how to detect AI-generated content
+            Upload two images - one normal and one suspected deepfake - to analyze and detect AI-generated content anomalies
           </p>
         </div>
 
         {/* Upload Section */}
         <div className="bg-orange/10 dark:bg-white/5 rounded-xl p-8 mb-8">
-          <div className="text-center">
+          <div className="text-center mb-8">
             <h2 className="text-2xl font-oswald font-semibold text-gray-900 dark:text-white mb-4">
-              Upload Image for Training
+              Upload Images for Analysis
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Use stock photos, your own photos, or royalty-free images for educational deepfake detection training
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
+              Upload two images - one normal reference image and one suspected deepfake for comparison analysis
             </p>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-            />
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="bg-orange hover:bg-orange/80 text-white px-8 py-3 rounded-lg font-inter font-medium transition-colors duration-200 mb-4"
-            >
-              Choose Image
-            </button>
-            {originalImage && (
-              <div className="mt-4">
-                <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">Original Image:</p>
-                <img
-                  src={originalImage}
-                  alt="Original"
-                  className="w-32 h-32 object-cover rounded-lg mx-auto cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={() => openModal(originalImage)}
-                />
-              </div>
-            )}
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Normal Image Upload */}
+            <div className="text-center">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Normal Reference Image</h3>
+              <input
+                ref={normalFileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleNormalImageUpload}
+                className="hidden"
+              />
+              <button
+                onClick={() => normalFileInputRef.current?.click()}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-inter font-medium transition-colors duration-200 mb-4"
+              >
+                Choose Normal Image
+              </button>
+              {normalImage && (
+                <div className="mt-4">
+                  <img
+                    src={normalImage}
+                    alt="Normal"
+                    className="w-32 h-32 object-cover rounded-lg mx-auto cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => openModal(normalImage)}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Deepfake Image Upload */}
+            <div className="text-center">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Suspected Deepfake Image</h3>
+              <input
+                ref={deepfakeFileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleDeepfakeImageUpload}
+                className="hidden"
+              />
+              <button
+                onClick={() => deepfakeFileInputRef.current?.click()}
+                className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-inter font-medium transition-colors duration-200 mb-4"
+              >
+                Choose Deepfake Image
+              </button>
+              {deepfakeImage && (
+                <div className="mt-4">
+                  <img
+                    src={deepfakeImage}
+                    alt="Deepfake"
+                    className="w-32 h-32 object-cover rounded-lg mx-auto cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => openModal(deepfakeImage)}
+                  />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Generate Deepfakes Button */}
-        {originalImage && !deepfakeImages.length && (
-          <div className="text-center mb-8">
-            <button
-              onClick={generateDeepfakes}
-              disabled={isGenerating}
-              className="bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white px-8 py-3 rounded-lg font-inter font-medium transition-colors duration-200"
-            >
-              {isGenerating ? 'Generating Deepfakes...' : 'Generate Deepfake Variations'}
-            </button>
-            {isGenerating && (
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                Creating 4 variations with varying manipulation levels...
-              </p>
-            )}
-          </div>
-        )}
-
         {/* Image Comparison */}
-        {originalImage && deepfakeImages.length > 0 && (
+        {normalImage && deepfakeImage && (
           <div className="mb-8">
             <h2 className="text-2xl font-oswald font-semibold text-gray-900 dark:text-white mb-6 text-center">
-              Compare Original vs Deepfake
+              Compare Images
             </h2>
             
             <div className="grid md:grid-cols-2 gap-8">
-              {/* Original Image */}
+              {/* Normal Image */}
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Original</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Normal Reference</h3>
                 <div className="relative w-full h-80 flex items-center justify-center">
                   <img
-                    src={originalImage}
-                    alt="Original"
+                    src={normalImage}
+                    alt="Normal"
                     className="max-w-full max-h-full object-contain rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
-                    onClick={() => openModal(originalImage)}
+                    onClick={() => openModal(normalImage)}
                   />
                 </div>
               </div>
 
-              {/* Deepfake Selection */}
+              {/* Deepfake Image */}
               <div className="text-center">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Generated Deepfake</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Suspected Deepfake</h3>
                 <div className="relative w-full h-80 flex items-center justify-center">
                   <img
-                    src={selectedDeepfake || deepfakeImages[0]}
+                    src={deepfakeImage}
                     alt="Deepfake"
                     className="max-w-full max-h-full object-contain rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
-                    onClick={() => openModal(selectedDeepfake || deepfakeImages[0])}
+                    onClick={() => openModal(deepfakeImage)}
                   />
-                </div>
-                
-                {/* Deepfake Variations */}
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">Choose a variation:</p>
-                  <div className="flex gap-2 justify-center flex-wrap">
-                    {deepfakeImages.map((img, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedDeepfake(img)}
-                        className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
-                          selectedDeepfake === img || (!selectedDeepfake && index === 0)
-                            ? 'border-orange'
-                            : 'border-gray-300 dark:border-gray-600'
-                        }`}
-                      >
-                        <img
-                          src={img}
-                          alt={`Deepfake ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </button>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>
@@ -303,7 +280,6 @@ export default function SpotDeepfake() {
               >
                 {isAnalyzing ? 'Analyzing...' : 'Detect Anomalies'}
               </button>
-              
             </div>
           </div>
         )}

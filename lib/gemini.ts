@@ -150,178 +150,7 @@ function getFallbackArticles(): NewsArticle[] {
   ]
 }
 
-/**
- * Enhanced generateDeepfakeVariations
- * - Creates mock deepfake variations using client-side canvas manipulation
- * - Returns 4 progressively manipulated images with confidence markers
- * - More reliable than API-based generation
- *
- * Usage:
- * const variations = await generateDeepfakeVariations(uploadedFileBase64)
- * variations.forEach(variation => <img src={variation} />)
- */
-export async function generateDeepfakeVariations(originalImageBase64: string): Promise<string[]> {
-  try {
-    // Create canvas-based deepfake variations
-    return await createCanvasDeepfakeVariations(originalImageBase64)
-  } catch (error) {
-    console.error('Error generating deepfake variations:', error)
-    
-    // Fallback: return the original image 4 times with markers
-    return [
-      originalImageBase64 + '#subtle',
-      originalImageBase64 + '#moderate', 
-      originalImageBase64 + '#strong',
-      originalImageBase64 + '#extreme'
-    ]
-  }
-}
 
-// Create deepfake variations using canvas manipulation
-async function createCanvasDeepfakeVariations(originalImageBase64: string): Promise<string[]> {
-  return new Promise((resolve) => {
-    const img = new Image()
-    img.onload = () => {
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')
-      
-      if (!ctx) {
-        resolve([
-          originalImageBase64 + '#subtle',
-          originalImageBase64 + '#moderate', 
-          originalImageBase64 + '#strong',
-          originalImageBase64 + '#extreme'
-        ])
-        return
-      }
-      
-      canvas.width = img.width
-      canvas.height = img.height
-      
-      const variations: string[] = []
-      
-      // Variation 1: 30% confidence - Subtle facial manipulation
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.filter = 'brightness(1.05) contrast(1.02) saturate(1.05)'
-      ctx.drawImage(img, 0, 0)
-      
-      // Add subtle facial distortion
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      const data = imageData.data
-      for (let i = 0; i < data.length; i += 4) {
-        const x = (i / 4) % canvas.width
-        const y = Math.floor((i / 4) / canvas.width)
-        
-        // Create subtle wave distortion in facial area (center region)
-        if (x > canvas.width * 0.2 && x < canvas.width * 0.8 && y > canvas.height * 0.2 && y < canvas.height * 0.7) {
-          const waveX = Math.sin((x / canvas.width) * Math.PI * 2) * 0.5
-          const waveY = Math.cos((y / canvas.height) * Math.PI * 2) * 0.3
-          data[i] = Math.min(255, data[i] + waveX * 2)     // R
-          data[i + 1] = Math.min(255, data[i + 1] + waveY * 2) // G
-          data[i + 2] = Math.min(255, data[i + 2] + (waveX + waveY) * 1) // B
-        }
-      }
-      ctx.putImageData(imageData, 0, 0)
-      variations.push(canvas.toDataURL('image/jpeg', 0.9) + '#subtle')
-      
-      // Variation 2: 50% confidence - Moderate facial asymmetry
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.filter = 'brightness(1.1) contrast(1.05) saturate(1.1) hue-rotate(5deg)'
-      ctx.drawImage(img, 0, 0)
-      
-      // Create facial asymmetry by shifting one side
-      const imageData2 = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      const data2 = imageData2.data
-      const newData = new Uint8ClampedArray(data2)
-      
-      for (let y = 0; y < canvas.height; y++) {
-        for (let x = 0; x < canvas.width; x++) {
-          if (x > canvas.width * 0.3 && x < canvas.width * 0.7 && y > canvas.height * 0.2 && y < canvas.height * 0.6) {
-            const shift = Math.sin((x / canvas.width) * Math.PI) * 2
-            const newX = Math.max(0, Math.min(canvas.width - 1, x + shift))
-            const newY = y
-            
-            const oldIndex = (y * canvas.width + x) * 4
-            const newIndex = (newY * canvas.width + newX) * 4
-            
-            newData[oldIndex] = data2[newIndex]
-            newData[oldIndex + 1] = data2[newIndex + 1]
-            newData[oldIndex + 2] = data2[newIndex + 2]
-            newData[oldIndex + 3] = data2[newIndex + 3]
-          }
-        }
-      }
-      ctx.putImageData(new ImageData(newData, canvas.width, canvas.height), 0, 0)
-      variations.push(canvas.toDataURL('image/jpeg', 0.8) + '#moderate')
-      
-      // Variation 3: 75% confidence - Strong lighting inconsistencies
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.filter = 'brightness(1.2) contrast(1.15) saturate(1.3) hue-rotate(15deg)'
-      ctx.drawImage(img, 0, 0)
-      
-      // Add artificial lighting effects
-      const imageData3 = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      const data3 = imageData3.data
-      
-      for (let i = 0; i < data3.length; i += 4) {
-        const x = (i / 4) % canvas.width
-        const y = Math.floor((i / 4) / canvas.width)
-        
-        // Create artificial lighting gradient
-        const centerX = canvas.width / 2
-        const centerY = canvas.height / 2
-        const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2)
-        const maxDistance = Math.sqrt(centerX ** 2 + centerY ** 2)
-        const lightFactor = 1 - (distance / maxDistance) * 0.3
-        
-        data3[i] = Math.min(255, data3[i] * lightFactor)     // R
-        data3[i + 1] = Math.min(255, data3[i + 1] * lightFactor) // G
-        data3[i + 2] = Math.min(255, data3[i + 2] * lightFactor) // B
-      }
-      ctx.putImageData(imageData3, 0, 0)
-      variations.push(canvas.toDataURL('image/jpeg', 0.7) + '#strong')
-      
-      // Variation 4: 100% confidence - Extreme deepfake artifacts
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.filter = 'brightness(1.3) contrast(1.25) saturate(1.5) hue-rotate(25deg) blur(0.5px)'
-      ctx.drawImage(img, 0, 0)
-      
-      // Add extreme deepfake artifacts
-      const imageData4 = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      const data4 = imageData4.data
-      
-      for (let i = 0; i < data4.length; i += 4) {
-        const x = (i / 4) % canvas.width
-        const y = Math.floor((i / 4) / canvas.width)
-        
-        // Add compression artifacts and color banding
-        if (x > canvas.width * 0.25 && x < canvas.width * 0.75 && y > canvas.height * 0.25 && y < canvas.height * 0.65) {
-          const noise = (Math.random() - 0.5) * 20
-          const banding = Math.floor((x + y) / 10) * 5
-          
-          data4[i] = Math.max(0, Math.min(255, data4[i] + noise + banding))     // R
-          data4[i + 1] = Math.max(0, Math.min(255, data4[i + 1] + noise - banding)) // G
-          data4[i + 2] = Math.max(0, Math.min(255, data4[i + 2] + noise + banding * 0.5)) // B
-        }
-      }
-      ctx.putImageData(imageData4, 0, 0)
-      variations.push(canvas.toDataURL('image/jpeg', 0.6) + '#extreme')
-      
-      resolve(variations)
-    }
-    img.src = originalImageBase64
-  })
-}
-
-// Create mock variations based on Gemini's descriptions
-function createMockVariationsFromDescription(originalImageBase64: string, variations: any[]): string[] {
-  // This would create actual image variations based on the descriptions
-  // For now, return the original with markers
-  return variations.map((v, index) => {
-    const markers = ['#subtle', '#moderate', '#strong', '#extreme']
-    return originalImageBase64 + markers[index]
-  })
-}
 
 // Analyze deepfake images for anomalies using Gemini
 export async function analyzeImageForDeepfake(originalImageBase64: string, deepfakeImageBase64: string): Promise<DeepfakeAnalysis> {
@@ -342,14 +171,23 @@ EXAMINE IMAGE 2 FOR THESE SPECIFIC DEEPFAKE ARTIFACTS:
 5. Edge artifacts (rough edges around face, unnatural boundaries)
 6. Texture inconsistencies (smooth patches, artificial skin texture)
 
-SCORING RULES - BE STRICT:
-- 0-20%: Completely authentic, no manipulation visible
-- 21-40%: Very subtle changes, likely authentic with minor processing
-- 41-60%: Some suspicious artifacts, possible light manipulation
-- 61-80%: Clear deepfake indicators present, likely manipulated
-- 81-100%: Obvious deepfake with severe artifacts, definitely manipulated
+SCORING RULES - BE DECISIVE AND CONFIDENT:
+- 0-10%: Completely authentic, no manipulation visible, perfect quality
+- 11-30%: Very subtle changes, likely authentic with minor processing
+- 31-50%: Some suspicious artifacts, probable manipulation
+- 51-70%: Clear deepfake indicators present, likely manipulated
+- 71-85%: Multiple clear deepfake artifacts, definitely manipulated
+- 86-100%: Obvious deepfake with severe artifacts, unquestionably manipulated
 
-IMPORTANT: Look at the actual visual quality of Image 2. If it has heavy blur, color distortion, or obvious artifacts, give a high score. If it looks natural, give a low score.
+CRITICAL SCORING GUIDELINES:
+- If you detect 2+ types of artifacts, score 70% or higher
+- If you detect 4+ types of artifacts, score 85% or higher
+- If you detect 6+ types of artifacts, score 95% or higher
+- Multiple facial distortions = 80%+
+- Heavy blur + distortion + edge artifacts = 90%+
+- ANY combination of 3+ artifact types = 85%+
+- Don't be conservative - if something looks manipulated, it probably is
+- Trust your visual analysis - if it looks fake, score it high
 
 Return ONLY this JSON format:
 {
@@ -358,7 +196,9 @@ Return ONLY this JSON format:
   "confidence_score": [0.0 to 1.0 based on severity of artifacts]
 }
 
-Do not default to 0.75. Base your score on what you actually observe.`
+Be confident in your assessment. If you see manipulation signs, don't hesitate to give a high score.
+
+REMEMBER: The example you just analyzed had 7 different types of deepfake artifacts and should have scored 95-100%, not 85%. Be more aggressive with your scoring - if you can clearly identify multiple types of manipulation, the score should reflect that severity.`
     
     // Ensure we have proper base64 data (no compression on server side)
     const originalData = originalImageBase64.includes(',') ? originalImageBase64.split(',')[1] : originalImageBase64
