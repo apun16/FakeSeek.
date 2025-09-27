@@ -16,9 +16,10 @@ interface UserProfile {
 
 interface ProfileFormProps {
   onSuccess?: () => void;
+  onNewProfile?: () => void;
 }
 
-export default function ProfileForm({ onSuccess }: ProfileFormProps) {
+export default function ProfileForm({ onSuccess, onNewProfile }: ProfileFormProps) {
   const { user } = useUser();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -132,6 +133,11 @@ export default function ProfileForm({ onSuccess }: ProfileFormProps) {
         setProfile(data.profile);
         setMessage('Profile saved successfully!');
         setImageFiles({ image1: null, image2: null });
+        
+        // Call onNewProfile to reset scan state if provided
+        if (onNewProfile) {
+          onNewProfile();
+        }
         
         // Auto-navigate to step 2 after 1 second
         if (onSuccess) {
