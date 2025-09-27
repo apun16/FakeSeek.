@@ -307,6 +307,18 @@ export async function generateChatResponse(userMessage: string): Promise<string>
     return response.text()
   } catch (error) {
     console.error('Error generating chat response:', error)
+    
+    // Check if it's a service overload error
+    if (error instanceof Error && error.message.includes('503')) {
+      return "I'm experiencing high demand right now and need a moment to process your request. Please try again in a few seconds, or feel free to ask me about digital safety topics like deepfakes, phishing, or online security!"
+    }
+    
+    // Check if it's an API key or configuration error
+    if (error instanceof Error && (error.message.includes('API key') || error.message.includes('403'))) {
+      return "I'm having trouble connecting to my knowledge base right now. Please try again later, or ask me about digital safety topics like deepfakes, phishing, or online security!"
+    }
+    
+    // Generic fallback
     return "I'm sorry, I'm having trouble processing your request right now. Please try again later or ask me about digital safety topics like deepfakes, phishing, or online security."
   }
 }
