@@ -9,18 +9,65 @@ interface ProgressContextType {
   getScoreLevel: () => 'beginner' | 'intermediate' | 'advanced' | 'expert'
   getScoreColor: () => string
   getScoreMessage: () => string
+  hasCompletedModule: (moduleName: string) => boolean
+  markModuleCompleted: (moduleName: string) => void
 }
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined)
 
 export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [digitalSafetyScore, setDigitalSafetyScore] = useState(0)
+  const [completedModules, setCompletedModules] = useState<Set<string>>(new Set())
 
-  // Load score from localStorage on mount
+  // Load score and completed modules from localStorage on mount and when window regains focus
   useEffect(() => {
-    const savedScore = localStorage.getItem('digitalSafetyScore')
-    if (savedScore) {
-      setDigitalSafetyScore(parseInt(savedScore, 10))
+    const loadData = () => {
+      const savedScore = localStorage.getItem('digitalSafetyScore')
+      if (savedScore) {
+        const score = parseInt(savedScore, 10)
+        if (!isNaN(score)) {
+          setDigitalSafetyScore(score)
+        }
+      }
+      
+      const savedModules = localStorage.getItem('completedModules')
+      if (savedModules) {
+        try {
+          const modules = JSON.parse(savedModules)
+          setCompletedModules(new Set(modules))
+        } catch (e) {
+          console.error('Error parsing completed modules:', e)
+        }
+      }
+    }
+    
+    loadData()
+    
+    // Reload data when window regains focus (user returns from another page)
+    window.addEventListener('focus', loadData)
+    
+    // Listen for storage changes from other tabs
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'digitalSafetyScore' && e.newValue) {
+        const score = parseInt(e.newValue, 10)
+        if (!isNaN(score)) {
+          setDigitalSafetyScore(score)
+        }
+      } else if (e.key === 'completedModules' && e.newValue) {
+        try {
+          const modules = JSON.parse(e.newValue)
+          setCompletedModules(new Set(modules))
+        } catch (err) {
+          console.error('Error parsing completed modules from storage:', err)
+        }
+      }
+    }
+    
+    window.addEventListener('storage', handleStorageChange)
+    
+    return () => {
+      window.removeEventListener('focus', loadData)
+      window.removeEventListener('storage', handleStorageChange)
     }
   }, [])
 
@@ -28,6 +75,11 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     localStorage.setItem('digitalSafetyScore', digitalSafetyScore.toString())
   }, [digitalSafetyScore])
+
+  // Save completed modules to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('completedModules', JSON.stringify(Array.from(completedModules)))
+  }, [completedModules])
 
   const updateScore = (change: number) => {
     setDigitalSafetyScore(prev => {
@@ -38,6 +90,14 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   const resetScore = () => {
     setDigitalSafetyScore(0)
+  }
+
+  const hasCompletedModule = (moduleName: string): boolean => {
+    return completedModules.has(moduleName)
+  }
+
+  const markModuleCompleted = (moduleName: string) => {
+    setCompletedModules(prev => new Set([...prev, moduleName]))
   }
 
   const getScoreLevel = (): 'beginner' | 'intermediate' | 'advanced' | 'expert' => {
@@ -76,7 +136,9 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       resetScore,
       getScoreLevel,
       getScoreColor,
-      getScoreMessage
+      getScoreMessage,
+      hasCompletedModule,
+      markModuleCompleted
     }}>
       {children}
     </ProgressContext.Provider>

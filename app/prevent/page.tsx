@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar'
 import ChatWidget from '@/components/ChatWidget'
 import Link from 'next/link'
 import { useUser } from '@auth0/nextjs-auth0/client'
+import { useProgress } from '@/lib/progress-context'
 
 interface NewsArticle {
   title: string
@@ -17,54 +18,11 @@ interface NewsArticle {
 }
 
 export default function Prevent() {
-  const [progress, setProgress] = useState(45) // Default progress
-  const [progressLoading, setProgressLoading] = useState(true)
   const [news, setNews] = useState<NewsArticle[]>([])
   const [newsLoading, setNewsLoading] = useState(true)
   const { user, error, isLoading } = useUser()
+  const { digitalSafetyScore, getScoreLevel, getScoreColor } = useProgress()
 
-  useEffect(() => {
-    // Load progress from localStorage
-    const loadProgress = () => {
-      try {
-        const savedProgress = localStorage.getItem('digitalPassportProgress')
-        if (savedProgress) {
-          const progressValue = parseInt(savedProgress)
-          if (!isNaN(progressValue) && progressValue >= 0 && progressValue <= 100) {
-            setProgress(progressValue)
-          }
-        }
-      } catch (error) {
-        console.error('Error loading progress from localStorage:', error)
-        // Keep default progress of 45
-      } finally {
-        setProgressLoading(false)
-      }
-    }
-
-    loadProgress()
-
-    // Listen for storage changes to update progress when user returns from other pages
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'digitalPassportProgress') {
-        loadProgress()
-      }
-    }
-
-    window.addEventListener('storage', handleStorageChange)
-    
-    // Also listen for focus events to refresh progress when user returns to tab
-    const handleFocus = () => {
-      loadProgress()
-    }
-    
-    window.addEventListener('focus', handleFocus)
-
-    return () => {
-      window.removeEventListener('storage', handleStorageChange)
-      window.removeEventListener('focus', handleFocus)
-    }
-  }, [])
 
   useEffect(() => {
     // Fetch news articles
@@ -125,28 +83,32 @@ export default function Prevent() {
       <main className="flex items-center justify-center min-h-[calc(100vh-4rem)] py-8">
         <div className="w-full max-w-6xl">
           
+          {/* Page Title */}
+          <div className="text-center mb-12">
+            <h1 className="text-5xl font-oswald font-bold text-black dark:text-white mb-4">
+              Digital Safety Prevention Hub
+            </h1>
+            <p className="text-xl font-inter text-black/70 dark:text-white/70 max-w-3xl mx-auto">
+              Build your digital literacy skills and protect yourself from online threats. Complete modules to advance your digital safety level.
+            </p>
+          </div>
           
           {/* Digital Passport Progress Bar */}
           <div className="w-full mb-16">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-oswald font-semibold text-black dark:text-white">
-                Prevention Progress Bar
+                Digital Safety Progress
               </h3>
-              {progressLoading ? (
-                <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-4 w-16 rounded"></div>
-              ) : (
-                <span className="text-black/70 dark:text-white/70">{progress}% Complete</span>
-              )}
+              <span className="text-black/70 dark:text-white/70">{digitalSafetyScore}% Complete</span>
             </div>
             
             {/* Progress Bar with Benchmarks */}
             <div className="relative mb-8">
               <div className="bg-gray-200 dark:bg-white/20 rounded-full h-4 overflow-hidden">
-                {progressLoading ? (
-                  <div className="animate-pulse bg-gray-300 dark:bg-gray-600 h-full rounded-full"></div>
-                ) : (
-                  <div className="bg-gradient-to-r from-orange to-orange/80 dark:from-orange dark:to-orange/70 h-full rounded-full transition-all duration-500" style={{width: `${progress}%`}}></div>
-                )}
+                <div 
+                  className="bg-orange h-full rounded-full transition-all duration-500"
+                  style={{width: `${Math.max(digitalSafetyScore, 1)}%`}}
+                ></div>
               </div>
               
               {/* Benchmarks */}
@@ -177,7 +139,7 @@ export default function Prevent() {
             {/* Progress Details */}
             <div className="text-center mt-20">
               <p className="text-black/70 dark:text-white/70 text-sm">
-                Complete modules and quizzes to advance your digital literacy level
+                Current Level: <span className="font-semibold capitalize">{getScoreLevel()}</span> • Complete modules and quizzes to advance your digital literacy level
               </p>
             </div>
           </div>

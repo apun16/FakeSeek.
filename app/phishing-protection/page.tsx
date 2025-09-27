@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Navbar from '@/components/Navbar'
 import Link from 'next/link'
+import { useProgress } from '@/lib/progress-context'
 
 interface Email {
   id: number
@@ -18,6 +19,7 @@ export default function PhishingProtection() {
   const [safeEmails, setSafeEmails] = useState<Email[]>([])
   const [suspiciousEmails, setSuspiciousEmails] = useState<Email[]>([])
   const [showResults, setShowResults] = useState(false)
+  const { updateScore, hasCompletedModule, markModuleCompleted } = useProgress()
 
   const emails: Email[] = [
     {
@@ -107,13 +109,21 @@ export default function PhishingProtection() {
   const checkAnswers = () => {
     setShowResults(true)
     
-    // Track progress in localStorage for digital passport
-    const currentProgress = localStorage.getItem('digitalPassportProgress') || '0'
-    const currentScore = parseInt(currentProgress)
-    const quizScore = calculateScore()
-    const newProgress = Math.min(100, currentScore + (quizScore * 2)) // Each correct answer adds 2%
+    // Calculate score and update progress (always apply penalties)
+    const correctAnswers = calculateScore()
+    const totalAnswers = safeEmails.length + suspiciousEmails.length
+    const wrongAnswers = totalAnswers - correctAnswers
     
-    localStorage.setItem('digitalPassportProgress', newProgress.toString())
+    // Update progress: +2 points for each correct answer, -1 point for each wrong answer
+    const progressChange = (correctAnswers * 2) - (wrongAnswers * 1)
+    updateScore(progressChange)
+    
+    // Mark module as completed (only once)
+    if (!hasCompletedModule('phishing_protection')) {
+      markModuleCompleted('phishing_protection')
+    }
+    
+    // Track activity
     localStorage.setItem('lastActivity', 'phishing_protection_quiz')
   }
 
