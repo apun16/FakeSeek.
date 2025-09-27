@@ -76,7 +76,7 @@ export default function Home() {
                 </div>
               </div>
               <h2 className="text-5xl font-oswald font-bold text-gray-900 dark:text-white mb-6 group-hover:text-orange transition-colors duration-500 leading-tight">
-                Learn & Prevent
+                Learn and Prevent
               </h2>
               <p className="text-xl font-inter text-gray-700 dark:text-white/90 max-w-lg mx-auto leading-relaxed group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">
                 Educate yourself with our comprehensive resources and tools to prevent falling for fake news

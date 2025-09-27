@@ -3,11 +3,13 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useUser } from '@auth0/nextjs-auth0/client'
+import { useState } from 'react'
 import ThemeToggle from './ThemeToggle'
 
 const Navbar = () => {
   const pathname = usePathname()
   const { user, isLoading } = useUser()
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false)
 
   const navItems = [
     { name: 'Home', href: '/' },
@@ -48,20 +50,43 @@ const Navbar = () => {
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange"></div>
               </div>
             ) : user ? (
-              <div className="flex items-center space-x-3">
-                <Link href="/profile" className="flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200">
+              <div 
+                className="relative"
+                onMouseEnter={() => setIsProfileDropdownOpen(true)}
+                onMouseLeave={() => setIsProfileDropdownOpen(false)}
+              >
+                <div className="flex items-center space-x-3 cursor-pointer">
                   <img 
                     src={user.picture || ''} 
                     alt="Profile" 
-                    className="w-8 h-8 rounded-full"
+                    className="w-8 h-8 rounded-full hover:opacity-80 transition-opacity duration-200"
                   />
-                </Link>
-                <a
-                  href="/api/auth/logout"
-                  className="text-orange hover:text-orange/80 text-xs font-inter transition-colors duration-200 ml-2"
-                >
-                  Sign Out
-                </a>
+                </div>
+                
+                {/* Dropdown Menu */}
+                {isProfileDropdownOpen && (
+                  <div 
+                    className="absolute right-0 mt-1 w-48 bg-white dark:bg-navy rounded-lg shadow-lg border border-gray-200 dark:border-white/20 py-2 z-50"
+                  >
+                    <div className="px-4 py-2 border-b border-gray-200 dark:border-white/20">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {user.name || 'User'}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {user.email}
+                      </p>
+                    </div>
+                    
+                    
+                    
+                    <a
+                      href="/api/auth/logout"
+                      className="block px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200"
+                    >
+                      Sign Out
+                    </a>
+                  </div>
+                )}
               </div>
             ) : (
               <a
