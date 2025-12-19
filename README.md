@@ -74,7 +74,7 @@ AUTH0_CLIENT_ID='your-auth0-client-id'
 AUTH0_CLIENT_SECRET='your-auth0-client-secret'
 
 # MongoDB Configuration
-MONGODB_URI='mongodb://localhost:27017/fakeseek'
+MONGODB_URI='mongodb://localhost:27017/'
 # Or for MongoDB Atlas:
 # MONGODB_URI='mongodb+srv://username:password@cluster.mongodb.net/'
 
