@@ -76,7 +76,7 @@ AUTH0_CLIENT_SECRET='your-auth0-client-secret'
 # MongoDB Configuration
 MONGODB_URI='mongodb://localhost:27017/fakeseek'
 # Or for MongoDB Atlas:
-# MONGODB_URI='mongodb+srv://username:password@cluster.mongodb.net/fakeseek'
+# MONGODB_URI='mongodb+srv://username:password@cluster.mongodb.net/'
 
 # Google Gemini API (for chat widget and image analysis)
 GEMINI_API_KEY='your-gemini-api-key'
